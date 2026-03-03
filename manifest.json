@@ -1,0 +1,68 @@
+{
+  "manifest_version": 3,
+  "name": "Taming Multitool",
+  "action": {
+    "default_icon": {
+      "512": "icon.png"
+    },
+    "default_title": "By KI10sus and Cipheron"
+  }, 
+  "version": "1.0",
+  "permissions": ["tabs", "debugger", "activeTab", "storage",
+  "https://taming.io/*",
+  "https://cdn.jsdelivr.net/*",
+  "https://unpkg.com/*",
+  "https://cdnjs.cloudflare.com/*",
+    "contextMenus"],
+  "host_permissions": ["https://taming.io/*","https://cdn.jsdelivr.net/*",
+    "https://unpkg.com/*","https://tfhub.dev/*",
+    "https://cdnjs.cloudflare.com/*", "<all_urls>"],
+  "background": {
+    "service_worker": "background.js",
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://taming.io/*"],
+      "js": [
+        "content/core.js",
+        "content/macro_recorder.js",
+        "content/graph.js",
+        "content/scale.js",
+        "content/theme_changer.js",
+        "content/automation.js",
+        "content/esp.js",
+        "content/tracker.js",
+        "content/themer.js",
+        "content/adblock_hider.js",
+        "content/navigation.js",
+        "content/markers.js",
+        "content/network.js",
+        "content/range.js",
+        "content/aimhelper.js",
+        "content/mousestats.js",
+        "content/keycounter.js",
+        "content/autoclicker.js",
+        "content/ai_tracker.js",
+        "content/visual_searcher.js",
+        "content/shader_hacker.js",
+        "content/edit_moment.js",
+        "content/splash.js",
+        "content/main.js",
+        "content/quantum_menu.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [{
+    "resources": ["icons/*.png", "assets/*.png", "utils/*.png", "fonts/*.ttf", "utils/*.mp3", "utils/face/*.png", "model/*", "ort/*"],
+    "matches": ["https://taming.io/*", "<all_urls>"]
+  }],
+  "cross_origin_embedder_policy": {
+    "value": "require-corp"
+  },
+  "cross_origin_opener_policy": {
+    "value": "same-origin"
+  }
+}
