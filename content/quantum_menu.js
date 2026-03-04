@@ -984,7 +984,7 @@
     const aboutLine = document.createElement('div');
     aboutLine.style.fontSize = '13px';
     aboutLine.style.lineHeight = '1.5';
-    setText(aboutLine, 'Dein Kontrollzentrum fuer Design, Sound und Fenster.');
+    setText(aboutLine, 'Developed von KI10sus der einzige Hersteller von diesem Client');
     const aboutVersion = document.createElement('div');
     aboutVersion.className = 'qt-cc-muted';
     setText(aboutVersion, 'Version 1.0');

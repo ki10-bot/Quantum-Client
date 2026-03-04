@@ -6,7 +6,7 @@
 
 > **WICHTIG / IMPORTANT / ВАЖНО — Bitte zuerst lesen / Please read first / Пожалуйста, прочтите в первую очередь**
 >
-> 1. **Es bestehen Risiken bei Missbrauch:** Unsachgemäße oder unfairer Einsatz (z. B. Manipulation des Spiels oder Automatisierung zur Erlangung unrechtmäßiger Vorteile) **kann als Cheating gelten** und zu Sperren oder sonstigen Konsequenzen führen. Verwende die Software verantwortungsbewusst und unter Berücksichtigung der Nutzungsbedingungen von taming.io.
+> **Es bestehen Risiken bei Missbrauch:** Unsachgemäße oder unfairer Einsatz (z. B. Manipulation des Spiels oder Automatisierung zur Erlangung unrechtmäßiger Vorteile) **kann als Cheating gelten** und zu Sperren oder sonstigen Konsequenzen führen. Verwende die Software verantwortungsbewusst und unter Berücksichtigung der Nutzungsbedingungen von taming.io.
 >
 > Improper or unfair use (e.g., manipulating the game or automation to gain an unfair advantage) **may be considered cheating** and lead to bans or other consequences. Use the software responsibly and in accordance with taming.io's terms of service.
 >
