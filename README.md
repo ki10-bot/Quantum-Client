@@ -1,15 +1,15 @@
 # Quantum Client — The Ultimate Multitool for taming.io
 
-# Quantum Client – Das ultimative Multitool für taming.io
-
-# Quantum Client — Ультимативный мультиинструмент для taming.io
-
 ---
 
 > **WICHTIG / IMPORTANT / ВАЖНО — Bitte zuerst lesen / Please read first / Пожалуйста, прочтите в первую очередь**
 >
-> 1. Dieses Projekt ist **der erste und beste taming.io-Client** von KI10sus — das soll sofort und deutlich sichtbar sein.
-> 2. **Es bestehen Risiken bei Missbrauch:** Unsachgemäße oder unfairer Einsatz (z. B. Manipulation des Spiels oder Automatisierung zur Erlangung unrechtmäßiger Vorteile) **kann als Cheating gelten** und zu Sperren oder sonstigen Konsequenzen führen. Verwende die Software verantwortungsbewusst und unter Berücksichtigung der Nutzungsbedingungen von taming.io.
+> 1. **Es bestehen Risiken bei Missbrauch:** Unsachgemäße oder unfairer Einsatz (z. B. Manipulation des Spiels oder Automatisierung zur Erlangung unrechtmäßiger Vorteile) **kann als Cheating gelten** und zu Sperren oder sonstigen Konsequenzen führen. Verwende die Software verantwortungsbewusst und unter Berücksichtigung der Nutzungsbedingungen von taming.io.
+
+Improper or unfair use (e.g., manipulating the game or automation to gain an unfair advantage) **may be considered cheating** and lead to bans or other consequences. Use the software responsibly and in accordance with taming.io's terms of service.
+
+Ненадлежащее или нечестное использование (например, манипулирование игрой или автоматизацией для получения несправедливого преимущества) **может рассматриваться как мошенничество** и привести к блокировке аккаунта или другим последствиям. Используйте программное обеспечение ответственно и в соответствии с условиями предоставления услуг taming.io.
+
 
 ---
 
