@@ -3,20 +3,23 @@
   const t = window.taming;
 
   t.themeChanger = function(overlay) {
-    // Button mit Fallback
+    
     let themeBtn;
     try {
       themeBtn = t.createIconButton('theme', 56, 65, 35);
     } catch (e) {
-      themeBtn = t.createButton('🎨');
+      themeBtn = t.createButton('Theme');
       themeBtn.style.width = '56px';
       themeBtn.style.height = '65px';
-      themeBtn.style.fontSize = '24px';
-      themeBtn.style.lineHeight = '65px';
+      themeBtn.style.fontSize = '11px';
+      themeBtn.style.lineHeight = '16px';
       themeBtn.style.padding = '0';
+      themeBtn.style.display = 'flex';
+      themeBtn.style.alignItems = 'center';
+      themeBtn.style.justifyContent = 'center';
     }
 
-    // Fenster für Status und Umschalter
+    
     const themeWin = t.createWindow('Theme Changer', '400px', '250px', '250px', '100px');
     themeWin.style.display = 'none';
 
@@ -24,7 +27,7 @@
       themeWin.style.display = themeWin.style.display === 'none' ? 'block' : 'none';
     };
 
-    // UI im Fenster
+    
     const container = document.createElement('div');
     container.style.padding = '4px';
     themeWin.appendChild(container);
@@ -40,20 +43,20 @@
     toggleBtn.style.width = '100%';
     toggleBtn.style.margin = '4px 0';
     toggleBtn.style.padding = '8px';
-    toggleBtn.style.background = '#a44';
-    toggleBtn.style.color = '#fff';
-    toggleBtn.style.border = 'none';
-    toggleBtn.style.borderRadius = '4px';
+    toggleBtn.style.background = 'var(--qt-accent, #b78bff)';
+    toggleBtn.style.color = '#111';
+    toggleBtn.style.border = '1px solid var(--qt-border, rgba(255,255,255,0.12))';
+    toggleBtn.style.borderRadius = '8px';
     toggleBtn.style.cursor = 'pointer';
     container.appendChild(toggleBtn);
 
-    // Zustand
+    
     let active = true;
     let styleOverride = null;
     let fontOverride = null;
     let imageObserver = null;
 
-    // --- CSS-Overrides für #pets und #eqLFz ---
+    
     function applyCssOverrides() {
       if (styleOverride) return;
       styleOverride = document.createElement('style');
@@ -76,7 +79,7 @@
       }
     }
 
-    // --- Schriftart ersetzen (global) ---
+    
     function applyFontOverride() {
       if (fontOverride) return;
       fontOverride = document.createElement('style');
@@ -104,13 +107,13 @@
       }
     }
 
-    // --- Bild ersetzen (play-picture.png?5 → animation.gif) ---
+    
     function replaceImage(img) {
       if (!img || !img.src) return;
-      // Prüfe, ob der Pfad das gesuchte Bild enthält (mit oder ohne Query-Parameter)
+      
       if (img.src.includes('play-picture.png')) {
         const newUrl = chrome.runtime.getURL('utils/ui/animation.gif');
-        // Nur ersetzen, wenn nicht bereits die neue URL
+        
         if (img.src !== newUrl) {
           img.src = newUrl;
           console.log('ThemeChanger: Bild ersetzt', img);
@@ -120,14 +123,14 @@
 
     function startImageObserver() {
       if (imageObserver) return;
-      // Bestehende Bilder sofort ersetzen
+      
       document.querySelectorAll('img').forEach(replaceImage);
-      // Observer für zukünftige Änderungen
+      
       imageObserver = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
-          // Neu hinzugefügte Knoten
+          
           mutation.addedNodes.forEach((node) => {
-            if (node.nodeType === 1) { // Element
+            if (node.nodeType === 1) { 
               if (node.tagName === 'IMG') {
                 replaceImage(node);
               } else {
@@ -135,7 +138,7 @@
               }
             }
           });
-          // Attribut-Änderungen an img (src)
+          
           if (mutation.type === 'attributes' && mutation.attributeName === 'src') {
             replaceImage(mutation.target);
           }
@@ -156,7 +159,7 @@
       }
     }
 
-    // Alles aktivieren/deaktivieren
+    
     function applyAll() {
       applyCssOverrides();
       applyFontOverride();
@@ -171,24 +174,26 @@
       statusDiv.innerHTML = 'Status: inaktiv';
     }
 
-    // Standardmäßig aktiv
+    
     applyAll();
 
     toggleBtn.onclick = () => {
       if (active) {
         revertAll();
         toggleBtn.textContent = 'Aktivieren';
-        toggleBtn.style.background = '#4a6';
+        toggleBtn.style.background = 'rgba(255,255,255,0.12)';
+        toggleBtn.style.color = 'var(--qt-text, #eaf1ff)';
         active = false;
       } else {
         applyAll();
         toggleBtn.textContent = 'Deaktivieren';
-        toggleBtn.style.background = '#a44';
+        toggleBtn.style.background = 'var(--qt-accent, #b78bff)';
+        toggleBtn.style.color = '#111';
         active = true;
       }
     };
 
-    // Aufräumen
+    
     window.addEventListener('beforeunload', () => {
       stopImageObserver();
     });

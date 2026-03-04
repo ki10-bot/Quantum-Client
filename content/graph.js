@@ -7,7 +7,7 @@
     const graphWin = t.createWindow('FPS & Ping', '200px', '350px', '300px', '240px');
     graphWin.style.display = 'none';
 
-    // Canvas für die Graphen
+
     const graphUI = document.createElement('canvas');
     graphUI.width = 280;
     graphUI.height = 100;
@@ -17,14 +17,13 @@
     graphUI.style.background = 'transparent';
     graphWin.appendChild(graphUI);
 
-    // Container für Texte und Steuerelemente
     const textContainer = document.createElement('div');
     textContainer.style.display = 'flex';
     textContainer.style.justifyContent = 'space-between';
     textContainer.style.alignItems = 'center';
     textContainer.style.marginTop = '4px';
     textContainer.style.fontSize = '12px';
-    textContainer.style.color = '#fff';
+    textContainer.style.color = 'var(--qt-text, #eaf1ff)';
     graphWin.appendChild(textContainer);
 
     const leftDiv = document.createElement('div');
@@ -40,53 +39,48 @@
     rightDiv.style.gap = '4px';
     textContainer.appendChild(rightDiv);
 
-    // Aktuelle Werte
+  
     const fpsSpan = document.createElement('span');
-    fpsSpan.innerHTML = '<span style="color:#ff9f40;">FPS</span>: <span id="fps-value">0</span>';
+    fpsSpan.innerHTML = 'FPS: <span id="fps-value">0</span>';
     const pingSpan = document.createElement('span');
-    pingSpan.innerHTML = '<span style="color:#a7ffc4;">Ping</span>: <span id="ping-value">0</span> ms';
+    pingSpan.innerHTML = 'Ping: <span id="ping-value">0</span> ms';
     const frameTimeSpan = document.createElement('span');
-    frameTimeSpan.innerHTML = '<span style="color:#ffaa00;">Frametime</span>: <span id="frametime-value">0</span> ms';
+    frameTimeSpan.innerHTML = 'Frametime: <span id="frametime-value">0</span> ms';
     leftDiv.appendChild(fpsSpan);
     leftDiv.appendChild(pingSpan);
     leftDiv.appendChild(frameTimeSpan);
 
-    // Durchschnittswerte
     const avgDiv = document.createElement('div');
     avgDiv.style.marginTop = '2px';
     avgDiv.style.fontSize = '11px';
-    avgDiv.style.color = '#aaa';
-    avgDiv.innerHTML = '⌀ <span id="avg-fps">0</span> FPS | ⌀ <span id="avg-ping">0</span> ms | ⌀ <span id="avg-frametime">0</span> ms';
+    avgDiv.style.color = 'var(--qt-text, #eaf1ff)';
+    avgDiv.style.opacity = '0.65';
+    avgDiv.innerHTML = 'Avg <span id="avg-fps">0</span> FPS | Avg <span id="avg-ping">0</span> ms | Avg <span id="avg-frametime">0</span> ms';
     leftDiv.appendChild(avgDiv);
 
-    // Reset-Button
+    
     const resetBtn = document.createElement('button');
-    resetBtn.textContent = '↺';
-    resetBtn.style.background = '#333';
-    resetBtn.style.color = '#fff';
-    resetBtn.style.border = '1px solid #555';
-    resetBtn.style.borderRadius = '4px';
-    resetBtn.style.padding = '2px 6px';
+    resetBtn.textContent = 'Reset';
+    resetBtn.style.padding = '4px 8px';
     resetBtn.style.cursor = 'pointer';
-    resetBtn.style.fontSize = '14px';
+    resetBtn.style.fontSize = '11px';
     resetBtn.title = 'Daten zurücksetzen';
     rightDiv.appendChild(resetBtn);
 
-    // Geschwindigkeits-Steuerung (Zeitraffer)
+    
     const speedDiv = document.createElement('div');
     speedDiv.style.display = 'flex';
     speedDiv.style.alignItems = 'center';
     speedDiv.style.gap = '4px';
     speedDiv.style.fontSize = '11px';
-    speedDiv.style.color = '#ccc';
+    speedDiv.style.color = 'var(--qt-text, #eaf1ff)';
+    speedDiv.style.opacity = '0.7';
     rightDiv.appendChild(speedDiv);
 
-    speedDiv.innerHTML = '<span>⏱️</span>';
+    const speedLabel = document.createElement('span');
+    speedLabel.textContent = 'Speed';
+    speedDiv.appendChild(speedLabel);
     const speedSelect = document.createElement('select');
-    speedSelect.style.background = '#333';
-    speedSelect.style.color = '#fff';
-    speedSelect.style.border = '1px solid #555';
-    speedSelect.style.borderRadius = '4px';
     speedSelect.style.padding = '2px';
     speedSelect.style.fontSize = '11px';
     speedDiv.appendChild(speedSelect);
@@ -114,11 +108,11 @@
     let dataInterval = null;
     let lastFrameTime = performance.now();
 
-    // FPS- und Frametime-Messung
+    
     let lastFpsUpdate = performance.now(), frames = 0;
     function fpsLoop(now) {
       frames++;
-      // Frametime berechnen (Zeit seit letztem Frame)
+      
       frameTimeValue = Math.round(now - lastFrameTime);
       lastFrameTime = now;
 
@@ -131,7 +125,7 @@
     }
     requestAnimationFrame(fpsLoop);
 
-    // Ping-Messung
+    
     async function measurePing() {
       if (!visible) return;
       try {
@@ -143,21 +137,9 @@
       }
     }
 
-    // Datenpunkte sammeln (abhängig von Geschwindigkeit)
     function collectData() {
       if (!visible) return;
       const speed = parseFloat(speedSelect.value);
-      // Bei höherer Geschwindigkeit sammeln wir öfter (oder seltener?) 
-      // Eigentlich: Speed = Faktor, um den der Graph schneller läuft.
-      // Das bedeutet, wir sammeln häufiger? Nein, wir wollen, dass der Graph gestaucht wird,
-      // also sammeln wir seltener bei höherer Geschwindigkeit, damit mehr Zeit pro Punkt vergeht.
-      // Aber wir sammeln hier einfach jede Sekunde, und die Anzahl der Punkte pro Zeiteinheit bleibt gleich.
-      // Um den Graphen zu strecken/stauchen, müssten wir die X-Skalierung ändern.
-      // Einfacher: Wir fügen bei jeder Geschwindigkeit gleich viele Punkte hinzu, aber die Zeitachse wird skaliert.
-      // Im updateGraph können wir dann die x-Skalierung anpassen.
-      // Deshalb sammeln wir hier immer im gleichen Intervall (1 Sekunde), aber die Anzeige skaliert.
-      
-      // Frametime ist bereits im ms-Bereich, wir speichern sie direkt.
       frameTimeData.push(frameTimeValue);
       pingData.push(pingValue);
       fpsData.push(fpsValue);
@@ -170,7 +152,7 @@
 
     function startDataCollection() {
       if (dataInterval) clearInterval(dataInterval);
-      // Sammle jede Sekunde (unabhängig von Geschwindigkeit, da wir die X-Skalierung anpassen)
+      
       dataInterval = setInterval(collectData, 1000);
       startPing();
     }
@@ -198,25 +180,9 @@
     function updateGraph() {
       if (!visible) return;
 
-      const speed = parseFloat(speedSelect.value); // 0.5, 1, 2, 4
-      // Die Anzahl der darzustellenden Punkte ist maxPoints, aber die X-Skalierung soll
-      // so sein, dass die Zeitspanne = maxPoints * (1/speed) Sekunden entspricht.
-      // Bei speed=1: 120 Punkte = 120 Sekunden (2 Minuten)
-      // Bei speed=2: 120 Punkte = 60 Sekunden (1 Minute) – also schnellerer Durchlauf.
-      // Bei speed=0.5: 120 Punkte = 240 Sekunden (4 Minuten) – langsamerer Durchlauf.
-      // Daher passen wir die Pixel pro Punkt an: const pixelPerPoint = graphUI.width / maxPoints * speed? Nein, wir skalieren einfach die x-Koordinaten.
-      // Wir berechnen für jeden Punkt i: x = i * (graphUI.width / maxPoints) * (1/speed)? Das würde die Kurve strecken.
-      // Besser: Wir lassen die Anzahl der sichtbaren Punkte konstant, aber die Zeitachse wird gedehnt/gestaucht,
-      // indem wir die x-Skalierung ändern. Das erreichen wir, indem wir die Breite pro Punkt anpassen:
-      // normal: breite = graphUI.width / maxPoints
-      // bei speed 2 (schneller) wollen wir, dass die Kurve flacher aussieht, also mehr Zeit pro Pixel -> breite = graphUI.width / maxPoints / speed.
-      // Das ist kompliziert. Einfacher: Wir ändern die Anzahl der tatsächlich angezeigten Punkte.
-      // Oder wir zeichnen immer alle maxPoints, aber die x-Skala ist linear, und der Betrachter sieht nur einen Ausschnitt.
-      // Für den Nutzer ist es okay, wenn der Graph einfach mit der gleichen Geschwindigkeit läuft, aber die Punkte häufiger kommen.
-      // Wir lassen es erstmal einfach: Wir sammeln immer im 1-Sekunden-Intervall und zeichnen alle Punkte, unabhängig von der Geschwindigkeit.
-      // Die Geschwindigkeitseinstellung könnte dann die Aktualisierungsrate des Graphen beeinflussen, aber das ist nicht gefragt.
+      const speed = parseFloat(speedSelect.value); 
+      
 
-      // Durchschnitt berechnen
       const avgFps = (fpsData.reduce((a, b) => a + b, 0) / fpsData.length).toFixed(1);
       const avgPing = (pingData.reduce((a, b) => a + b, 0) / pingData.length).toFixed(0);
       const avgFrameTime = (frameTimeData.reduce((a, b) => a + b, 0) / frameTimeData.length).toFixed(1);
@@ -230,8 +196,15 @@
 
       graphCtx.clearRect(0, 0, graphUI.width, graphUI.height);
 
-      // Hilfslinien (optional)
-      graphCtx.strokeStyle = '#333';
+      const styles = getComputedStyle(graphWin);
+      const accent = (styles.getPropertyValue('--qt-accent') || '#b78bff').trim();
+      const accentSoftRaw = (styles.getPropertyValue('--qt-accent-soft') || 'rgba(120, 255, 190, 0.25)').trim();
+      const textColor = (styles.getPropertyValue('--qt-text') || '#eaf1ff').trim();
+      const pingColor = accentSoftRaw || accent;
+      const frameColor = textColor;
+
+      
+      graphCtx.strokeStyle = 'rgba(255,255,255,0.08)';
       graphCtx.lineWidth = 0.5;
       for (let i = 0; i <= 4; i++) {
         const y = i * (graphUI.height / 4);
@@ -241,34 +214,34 @@
         graphCtx.stroke();
       }
 
-      // Frametime (gelb)
-      graphCtx.strokeStyle = '#ffaa00';
+      
+      graphCtx.strokeStyle = frameColor;
       graphCtx.beginPath();
       frameTimeData.forEach((ft, i) => {
         const x = i * (graphUI.width / maxPoints);
-        const y = graphUI.height - (ft / 100 * graphUI.height); // max 100 ms (über 100 ms = sehr laggy)
+        const y = graphUI.height - (ft / 100 * graphUI.height); 
         if (i === 0) graphCtx.moveTo(x, y);
         else graphCtx.lineTo(x, y);
       });
       graphCtx.stroke();
 
-      // Ping (grün)
-      graphCtx.strokeStyle = '#a7ffc4';
+      
+      graphCtx.strokeStyle = pingColor;
       graphCtx.beginPath();
       pingData.forEach((p, i) => {
         const x = i * (graphUI.width / maxPoints);
-        const y = graphUI.height - (p / 200 * graphUI.height); // max 200 ms
+        const y = graphUI.height - (p / 200 * graphUI.height); 
         if (i === 0) graphCtx.moveTo(x, y);
         else graphCtx.lineTo(x, y);
       });
       graphCtx.stroke();
 
-      // FPS (orange)
-      graphCtx.strokeStyle = '#ff9f40';
+      
+      graphCtx.strokeStyle = accent;
       graphCtx.beginPath();
       fpsData.forEach((f, i) => {
         const x = i * (graphUI.width / maxPoints);
-        const y = graphUI.height - (f / 120 * graphUI.height); // max 120 FPS
+        const y = graphUI.height - (f / 120 * graphUI.height); 
         if (i === 0) graphCtx.moveTo(x, y);
         else graphCtx.lineTo(x, y);
       });

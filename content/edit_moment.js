@@ -7,15 +7,18 @@
     try {
       editBtn = t.createIconButton('edit', 56, 65, 35);
     } catch (e) {
-      editBtn = t.createButton('✂️');
+      editBtn = t.createButton('Edit');
       editBtn.style.width = '56px';
       editBtn.style.height = '65px';
-      editBtn.style.fontSize = '24px';
-      editBtn.style.lineHeight = '65px';
+      editBtn.style.fontSize = '12px';
+      editBtn.style.lineHeight = '16px';
       editBtn.style.padding = '0';
+      editBtn.style.display = 'flex';
+      editBtn.style.alignItems = 'center';
+      editBtn.style.justifyContent = 'center';
     }
 
-    // state
+    
     let isActive = false;
     let vibrationInterval = null;
     let overlayDiv = null;
@@ -23,7 +26,7 @@
     let freezeStyle = null;
     let shakeHandle = { raf: null };
 
-    // noise / glow / face
+    
     let noiseCanvas = null;
     let noiseCtx = null;
     let noiseInterval = null;
@@ -31,14 +34,14 @@
     let glowDiv = null;
     let faceImg = null;
 
-    // audio analyser
+    
     let audioCtx = null;
     let analyser = null;
     let sourceNode = null;
     let dataArray = null;
     let rafId = null;
 
-    // settings
+    
     const CONTRAST_AMOUNT = 1.6;
     const NOISE_OPACITY = 0.06;
     const NOISE_SCALE = 1.6;
@@ -46,19 +49,19 @@
     const GLOW_BRIGHTNESS = 2.2;
     const GLOW_OPACITY = 0.62;
 
-    // amplitude mapping (tweakable)
-    const BASE_X = 70;      // base horizontal amplitude (px)
-    const BASE_Y = 52.5;    // base vertical amplitude (px)
-    const BASE_R = 2.5;     // base rotation (deg)
-    const MAX_MULTIPLIER = 2.5; // max loudness multiplier
+    
+    const BASE_X = 70;      
+    const BASE_Y = 52.5;    
+    const BASE_R = 2.5;     
+    const MAX_MULTIPLIER = 2.5; 
 
-    // beat detection
+    
     let lastBeatTime = 0;
-    const minBeatGap = 70; // ms
-    let adaptiveThreshold = 0.012; // baseline for ambient RMS
-    const THRESH_MULT = 1.15; // how far über adaptive threshold a peak must liegen
+    const minBeatGap = 70; 
+    let adaptiveThreshold = 0.012; 
+    const THRESH_MULT = 1.15; 
 
-    // helper: block keys while active
+    
     function blockKeys(e) {
       if (isActive) {
         e.preventDefault();
@@ -66,7 +69,7 @@
       }
     }
 
-    // freeze styles
+    
     function injectFreezeStyles() {
       freezeStyle = document.createElement('style');
       freezeStyle.id = 'edit-moment-freeze-style';
@@ -93,7 +96,7 @@
       document.documentElement.style.transform = '';
     }
 
-    // smooth damped shake (RAF-driven)
+    
     function startSmoothShake(targetX, targetY, targetR) {
       if (shakeHandle.raf) cancelAnimationFrame(shakeHandle.raf);
 
@@ -127,7 +130,7 @@
       shakeHandle.raf = requestAnimationFrame(frame);
     }
 
-    // noise layer
+    
     function createNoiseLayer() {
       const cw = 240, ch = 160;
       noiseCanvas = document.createElement('canvas');
@@ -170,7 +173,7 @@
       noiseCtx = null;
     }
 
-    // glow layer – only bright areas will glow due to mix-blend + backdrop-filter
+    
     function createGlowLayer() {
       glowDiv = document.createElement('div');
       glowDiv.style.position = 'absolute';
@@ -194,9 +197,9 @@
       glowDiv = null;
     }
 
-    // face image
+    
     function createFaceLayer() {
-      const faces = ['face1.png', 'face2.png', 'face3.png']; // passe Dateinamen an
+      const faces = ['face1.png', 'face2.png', 'face3.png']; 
       const randomFace = faces[Math.floor(Math.random() * faces.length)];
       faceImg = document.createElement('img');
       faceImg.src = chrome.runtime.getURL(`utils/face/${randomFace}`);
@@ -208,7 +211,7 @@
       faceImg.style.maxHeight = '50%';
       faceImg.style.pointerEvents = 'none';
       faceImg.style.zIndex = '99999993';
-      // apply same look as overlay (grayscale + contrast/brightness)
+      
       faceImg.style.filter = `grayscale(1) brightness(0.72) contrast(${CONTRAST_AMOUNT})`;
       faceImg.style.mixBlendMode = 'screen';
       if (overlayDiv) overlayDiv.appendChild(faceImg);
@@ -219,7 +222,7 @@
       faceImg = null;
     }
 
-    // fallback vibration (keeps old behavior if analyser unavailable)
+    
     function startFallbackVibration() {
       if (vibrationInterval) clearInterval(vibrationInterval);
       vibrationInterval = setInterval(() => {
@@ -230,7 +233,7 @@
       }, 200);
     }
 
-    // ---------------- WebAudio: analyser loop ----------------
+    
     function setupAudioAnalyser() {
       try {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -251,7 +254,7 @@
     function computeRMS(timeDomainArray) {
       let sum = 0;
       for (let i = 0; i < timeDomainArray.length; i++) {
-        const v = (timeDomainArray[i] - 128) / 128; // -1..1
+        const v = (timeDomainArray[i] - 128) / 128; 
         sum += v * v;
       }
       return Math.sqrt(sum / timeDomainArray.length);
@@ -263,32 +266,32 @@
       const rms = computeRMS(dataArray);
       const now = performance.now();
 
-      // update adaptive baseline faster to track ambient
+      
       adaptiveThreshold = adaptiveThreshold * 0.94 + rms * 0.06;
       const threshold = Math.max(adaptiveThreshold * THRESH_MULT, 0.008);
 
-      // if we detect a peak above threshold and not too soon after last, trigger a shake scaled by loudness
+      
       if (rms > threshold && (now - lastBeatTime) > minBeatGap) {
         lastBeatTime = now;
-        // multiplier proportional to how far rms is above threshold
+        
         let multiplier = (rms / threshold);
-        // clamp and smooth multiplier range
+        
         multiplier = Math.min(MAX_MULTIPLIER, Math.max(0.6, multiplier));
-        // compute target amplitudes proportional to multiplier
+        
         const tx = BASE_X * multiplier;
         const ty = BASE_Y * multiplier;
         const tr = BASE_R * multiplier;
         startSmoothShake(tx, ty, tr);
       }
 
-      // optional: small continuous micro-shake proportional to rms (commented out)
-      // const micro = Math.min(0.45, rms * 1.8);
-      // document.documentElement.style.transform = `translate(${micro}px, ${micro}px)`;
+      
+      
+      
 
       rafId = requestAnimationFrame(analyserLoop);
     }
 
-    // cleanup audio analyser
+    
     function destroyAnalyser() {
       if (rafId) {
         cancelAnimationFrame(rafId);
@@ -303,7 +306,7 @@
       }
     }
 
-    // stop everything
+    
     function stopEditMoment() {
       if (!isActive) return;
       isActive = false;
@@ -338,7 +341,7 @@
       }
     }
 
-    // start
+    
     function startEditMoment() {
       if (isActive) return;
 
@@ -368,10 +371,10 @@
         play.catch(e => console.warn('Sound konnte nicht abgespielt werden:', e));
       }
 
-      // try webaudio analyser; if not available, fall back to fixed interval
+      
       const ok = setupAudioAnalyser();
       if (ok) {
-        // resume context if suspended by autoplay policy
+        
         if (audioCtx && audioCtx.state === 'suspended') {
           audioCtx.resume().catch(()=>{});
         }
@@ -384,7 +387,7 @@
       audio.addEventListener('ended', () => { if (isActive) stopEditMoment(); });
     }
 
-    // button handler
+    
     editBtn.onclick = () => { if (!isActive) startEditMoment(); else stopEditMoment(); };
     window.addEventListener('beforeunload', () => { stopEditMoment(); });
 

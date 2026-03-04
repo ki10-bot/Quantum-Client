@@ -3,19 +3,22 @@
   const t = window.taming;
 
   t.autoClicker = function(overlay) {
-    // ------------------------------------------------------------
-    // 1. Button mit Fallback
-    // ------------------------------------------------------------
+    
+    
+    
     let clickerBtn;
     try {
       clickerBtn = t.createIconButton('clicker', 56, 65, 35);
     } catch (e) {
-      clickerBtn = t.createButton('🖱️');
+      clickerBtn = t.createButton('Click');
       clickerBtn.style.width = '56px';
       clickerBtn.style.height = '65px';
-      clickerBtn.style.fontSize = '24px';
-      clickerBtn.style.lineHeight = '65px';
+      clickerBtn.style.fontSize = '11px';
+      clickerBtn.style.lineHeight = '16px';
       clickerBtn.style.padding = '0';
+      clickerBtn.style.display = 'flex';
+      clickerBtn.style.alignItems = 'center';
+      clickerBtn.style.justifyContent = 'center';
     }
 
     const clickerWin = t.createWindow('Autoclicker', '400px', '250px', '350px', '420px');
@@ -25,41 +28,41 @@
       clickerWin.style.display = clickerWin.style.display === 'none' ? 'block' : 'none';
     };
 
-    // ------------------------------------------------------------
-    // 2. UI-Elemente
-    // ------------------------------------------------------------
+    
+    
+    
     const container = document.createElement('div');
     container.style.padding = '4px';
     clickerWin.appendChild(container);
 
-    // Status
+    
     const statusDiv = document.createElement('div');
     statusDiv.style.margin = '4px';
     statusDiv.style.fontSize = '14px';
-    statusDiv.innerHTML = '⏸️ Gestoppt';
+    statusDiv.textContent = 'Gestoppt';
     container.appendChild(statusDiv);
 
-    // Fehler-/Warnmeldung
+    
     const errorDiv = document.createElement('div');
     errorDiv.style.margin = '4px';
     errorDiv.style.fontSize = '12px';
-    errorDiv.style.color = '#faa';
+    errorDiv.style.color = 'rgba(255, 140, 140, 0.9)';
     container.appendChild(errorDiv);
 
-    // Start/Stopp-Button
+    
     const toggleBtn = document.createElement('button');
     toggleBtn.textContent = 'Starten';
     toggleBtn.style.width = '100%';
     toggleBtn.style.margin = '4px 0';
     toggleBtn.style.padding = '8px';
-    toggleBtn.style.background = '#4a6';
-    toggleBtn.style.color = '#fff';
-    toggleBtn.style.border = 'none';
-    toggleBtn.style.borderRadius = '4px';
+    toggleBtn.style.background = 'rgba(255,255,255,0.12)';
+    toggleBtn.style.color = 'var(--qt-text, #eaf1ff)';
+    toggleBtn.style.border = '1px solid var(--qt-border, rgba(255,255,255,0.12))';
+    toggleBtn.style.borderRadius = '8px';
     toggleBtn.style.cursor = 'pointer';
     container.appendChild(toggleBtn);
 
-    // Klicks pro Sekunde
+    
     const cpsDiv = document.createElement('div');
     cpsDiv.style.margin = '8px 4px';
     cpsDiv.innerHTML = '<span style="font-size:12px;">Klicks pro Sekunde: <span id="clicker-cps-value">10</span></span>';
@@ -72,15 +75,15 @@
     cpsDiv.appendChild(cpsSlider);
     container.appendChild(cpsDiv);
 
-    // Maustaste-Auswahl
+    
     const buttonDiv = document.createElement('div');
     buttonDiv.style.margin = '8px 4px';
     buttonDiv.style.fontSize = '12px';
     buttonDiv.innerHTML = '<span>Maustaste: </span>';
     const buttonSelect = document.createElement('select');
-    buttonSelect.style.background = '#333';
-    buttonSelect.style.color = '#fff';
-    buttonSelect.style.border = '1px solid #555';
+    buttonSelect.style.background = 'rgba(22, 24, 32, 0.9)';
+    buttonSelect.style.color = 'var(--qt-text, #eaf1ff)';
+    buttonSelect.style.border = '1px solid var(--qt-border, rgba(255,255,255,0.12))';
     buttonSelect.style.marginLeft = '4px';
     const leftOpt = document.createElement('option'); leftOpt.value = 'left'; leftOpt.textContent = 'Links';
     const rightOpt = document.createElement('option'); rightOpt.value = 'right'; rightOpt.textContent = 'Rechts';
@@ -91,9 +94,9 @@
     buttonDiv.appendChild(buttonSelect);
     container.appendChild(buttonDiv);
 
-    // ------------------------------------------------------------
-    // Hold-Modus mit Tastatur- und Mausauslöser
-    // ------------------------------------------------------------
+    
+    
+    
     const modeDiv = document.createElement('div');
     modeDiv.style.margin = '8px 4px';
     const modeCheck = document.createElement('input');
@@ -114,14 +117,14 @@
     keyInput.placeholder = 'Taste/Maustaste drücken...';
     keyInput.readOnly = true;
     keyInput.style.width = '100%';
-    keyInput.style.background = '#333';
-    keyInput.style.color = '#fff';
-    keyInput.style.border = '1px solid #555';
+    keyInput.style.background = 'rgba(22, 24, 32, 0.9)';
+    keyInput.style.color = 'var(--qt-text, #eaf1ff)';
+    keyInput.style.border = '1px solid var(--qt-border, rgba(255,255,255,0.12))';
     keyInput.style.padding = '4px';
     keyDiv.appendChild(keyInput);
     container.appendChild(keyDiv);
 
-    let holdTrigger = null; // { type: 'key', code: 'KeyW' } oder { type: 'mouse', button: 'left' }
+    let holdTrigger = null; 
 
     function formatTrigger(trigger) {
       if (!trigger) return '';
@@ -163,9 +166,9 @@
       if (!e.target.checked) holdTrigger = null;
     });
 
-    // ------------------------------------------------------------
-    // Zufällige Verzögerung
-    // ------------------------------------------------------------
+    
+    
+    
     const randomDiv = document.createElement('div');
     randomDiv.style.margin = '8px 4px';
     const randomCheck = document.createElement('input');
@@ -195,23 +198,23 @@
       randomSliderDiv.style.display = e.target.checked ? 'block' : 'none';
     });
 
-    // Klick-Zähler
+    
     const countDiv = document.createElement('div');
     countDiv.style.margin = '8px 4px';
     countDiv.style.fontSize = '14px';
     countDiv.innerHTML = 'Klicks: <span id="clicker-count">0</span>';
     container.appendChild(countDiv);
 
-    // Reset-Zähler-Button
+    
     const resetCountBtn = document.createElement('button');
     resetCountBtn.textContent = 'Zähler zurücksetzen';
     resetCountBtn.style.width = '100%';
     resetCountBtn.style.margin = '4px 0';
     resetCountBtn.style.padding = '4px';
-    resetCountBtn.style.background = '#a44';
-    resetCountBtn.style.color = '#fff';
-    resetCountBtn.style.border = 'none';
-    resetCountBtn.style.borderRadius = '4px';
+    resetCountBtn.style.background = 'rgba(255,255,255,0.08)';
+    resetCountBtn.style.color = 'var(--qt-text, #eaf1ff)';
+    resetCountBtn.style.border = '1px solid var(--qt-border, rgba(255,255,255,0.12))';
+    resetCountBtn.style.borderRadius = '8px';
     resetCountBtn.style.cursor = 'pointer';
     resetCountBtn.onclick = () => {
       clickCount = 0;
@@ -219,20 +222,20 @@
     };
     container.appendChild(resetCountBtn);
 
-    // ------------------------------------------------------------
-    // 3. Zustand und Variablen
-    // ------------------------------------------------------------
+    
+    
+    
     let active = false;
     let intervalId = null;
     let clickCount = 0;
-    let triggerActive = false; // true wenn Hold-Trigger gedrückt
+    let triggerActive = false; 
 
     function updateCount() {
       const span = document.getElementById('clicker-count');
       if (span) span.textContent = clickCount;
     }
 
-    // Klick-Funktion
+    
     function performClick() {
       if (!active) return;
       if (modeCheck.checked && holdTrigger && !triggerActive) return;
@@ -240,7 +243,7 @@
       const x = t.lastMouseX;
       const y = t.lastMouseY;
       if (x === 0 && y === 0) {
-        errorDiv.textContent = '⚠️ Keine Mausposition – bewege die Maus.';
+        errorDiv.textContent = 'Keine Mausposition – bewege die Maus.';
         return;
       } else {
         errorDiv.textContent = '';
@@ -258,12 +261,12 @@
           updateCount();
         } else {
           console.error('Autoclicker: Klick fehlgeschlagen', response?.error);
-          errorDiv.textContent = '❌ Klick fehlgeschlagen – Debugger?';
+          errorDiv.textContent = 'Klick fehlgeschlagen – Debugger?';
         }
       });
     }
 
-    // Intervall-Logik
+    
     function startInterval() {
       if (intervalId) clearTimeout(intervalId);
       const baseDelay = 1000 / cpsSlider.value;
@@ -293,7 +296,7 @@
       }
     }
 
-    // Hold-Listener (Tastatur & Maus)
+    
     function onTriggerDown(e) {
       if (!modeCheck.checked || !holdTrigger) return;
       if (holdTrigger.type === 'key' && e.type === 'keydown' && e.code === holdTrigger.code) {
@@ -338,21 +341,22 @@
       document.removeEventListener('mouseup', onTriggerUp);
     }
 
-    // ------------------------------------------------------------
-    // 4. Start/Stopp-Logik
-    // ------------------------------------------------------------
+    
+    
+    
     toggleBtn.onclick = () => {
-      // Prüfung vor Start
+      
       if (!active && modeCheck.checked && !holdTrigger) {
-        errorDiv.textContent = '⚠️ Bitte zuerst eine Taste oder Maustaste festlegen.';
+        errorDiv.textContent = 'Bitte zuerst eine Taste oder Maustaste festlegen.';
         return;
       }
 
       active = !active;
       if (active) {
         toggleBtn.textContent = 'Stoppen';
-        toggleBtn.style.background = '#a44';
-        statusDiv.innerHTML = '▶️ Aktiv';
+        toggleBtn.style.background = 'var(--qt-accent, #b78bff)';
+        toggleBtn.style.color = '#111';
+        statusDiv.textContent = 'Aktiv';
         errorDiv.textContent = '';
         if (modeCheck.checked && holdTrigger) {
           addHoldListeners();
@@ -360,15 +364,16 @@
         startInterval();
       } else {
         toggleBtn.textContent = 'Starten';
-        toggleBtn.style.background = '#4a6';
-        statusDiv.innerHTML = '⏸️ Gestoppt';
+        toggleBtn.style.background = 'rgba(255,255,255,0.12)';
+        toggleBtn.style.color = 'var(--qt-text, #eaf1ff)';
+        statusDiv.textContent = 'Gestoppt';
         stopInterval();
         removeHoldListeners();
         triggerActive = false;
       }
     };
 
-    // Slider-Werte anzeigen
+    
     const cpsSpan = document.getElementById('clicker-cps-value') || document.createElement('span');
     cpsSpan.textContent = cpsSlider.value;
     cpsSlider.addEventListener('input', () => {
@@ -383,9 +388,9 @@
 
     updateCount();
 
-    // ------------------------------------------------------------
-    // 5. Aufräumen
-    // ------------------------------------------------------------
+    
+    
+    
     window.addEventListener('beforeunload', () => {
       if (active) {
         stopInterval();

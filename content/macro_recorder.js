@@ -3,19 +3,22 @@
   const t = window.taming;
 
   t.macroRecorder = function(overlay) {
-    // ------------------------------------------------------------
-    // 1. Button mit Fallback
-    // ------------------------------------------------------------
+    
+    
+    
     let macroBtn;
     try {
       macroBtn = t.createIconButton('macro', 56, 65, 35);
     } catch (e) {
-      macroBtn = t.createButton('🎬');
+      macroBtn = t.createButton('Macro');
       macroBtn.style.width = '56px';
       macroBtn.style.height = '65px';
-      macroBtn.style.fontSize = '24px';
-      macroBtn.style.lineHeight = '65px';
+      macroBtn.style.fontSize = '11px';
+      macroBtn.style.lineHeight = '16px';
       macroBtn.style.padding = '0';
+      macroBtn.style.display = 'flex';
+      macroBtn.style.alignItems = 'center';
+      macroBtn.style.justifyContent = 'center';
     }
 
     const macroWin = t.createWindow('Makro Recorder Pro', '300px', '300px', '420px', '500px');
@@ -25,9 +28,9 @@
       macroWin.style.display = macroWin.style.display === 'none' ? 'block' : 'none';
     };
 
-    // ------------------------------------------------------------
-    // 2. UI-Elemente
-    // ------------------------------------------------------------
+    
+    
+    
     const container = document.createElement('div');
     container.style.padding = '4px';
     macroWin.appendChild(container);
@@ -43,9 +46,9 @@
     logDiv.style.fontSize = '12px';
     logDiv.style.maxHeight = '120px';
     logDiv.style.overflowY = 'auto';
-    logDiv.style.background = '#222';
+    logDiv.style.background = 'rgba(10, 12, 18, 0.4)';
     logDiv.style.padding = '2px';
-    logDiv.style.color = '#0f0';
+    logDiv.style.color = 'var(--qt-text, #eaf1ff)';
     logDiv.style.fontFamily = 'monospace';
     container.appendChild(logDiv);
 
@@ -62,10 +65,10 @@
     recordBtn.style.width = '100%';
     recordBtn.style.margin = '4px 0';
     recordBtn.style.padding = '8px';
-    recordBtn.style.background = '#a44';
-    recordBtn.style.color = '#fff';
-    recordBtn.style.border = 'none';
-    recordBtn.style.borderRadius = '4px';
+    recordBtn.style.background = 'var(--qt-accent, #b78bff)';
+    recordBtn.style.color = '#111';
+    recordBtn.style.border = '1px solid var(--qt-border, rgba(255,255,255,0.12))';
+    recordBtn.style.borderRadius = '8px';
     recordBtn.style.cursor = 'pointer';
     recordBtn.style.fontWeight = 'bold';
     container.appendChild(recordBtn);
@@ -75,10 +78,10 @@
     stopBtn.style.width = '100%';
     stopBtn.style.margin = '4px 0';
     stopBtn.style.padding = '8px';
-    stopBtn.style.background = '#4a6';
-    stopBtn.style.color = '#fff';
-    stopBtn.style.border = 'none';
-    stopBtn.style.borderRadius = '4px';
+    stopBtn.style.background = 'rgba(255,255,255,0.12)';
+    stopBtn.style.color = 'var(--qt-text, #eaf1ff)';
+    stopBtn.style.border = '1px solid var(--qt-border, rgba(255,255,255,0.12))';
+    stopBtn.style.borderRadius = '8px';
     stopBtn.style.cursor = 'pointer';
     stopBtn.style.fontWeight = 'bold';
     container.appendChild(stopBtn);
@@ -88,15 +91,15 @@
     playBtn.style.width = '100%';
     playBtn.style.margin = '4px 0';
     playBtn.style.padding = '8px';
-    playBtn.style.background = '#4a6';
-    playBtn.style.color = '#fff';
-    playBtn.style.border = 'none';
-    playBtn.style.borderRadius = '4px';
+    playBtn.style.background = 'rgba(255,255,255,0.12)';
+    playBtn.style.color = 'var(--qt-text, #eaf1ff)';
+    playBtn.style.border = '1px solid var(--qt-border, rgba(255,255,255,0.12))';
+    playBtn.style.borderRadius = '8px';
     playBtn.style.cursor = 'pointer';
     playBtn.style.fontWeight = 'bold';
     container.appendChild(playBtn);
 
-    // Geschwindigkeitsslider
+    
     const speedDiv = document.createElement('div');
     speedDiv.style.margin = '8px 0';
     speedDiv.style.fontSize = '12px';
@@ -116,7 +119,7 @@
       speedSpan.textContent = speedSlider.value;
     });
 
-    // Checkbox für Visualisierung
+    
     const vizDiv = document.createElement('div');
     vizDiv.style.margin = '8px 0';
     vizDiv.style.fontSize = '12px';
@@ -132,23 +135,23 @@
     vizDiv.appendChild(vizLabel);
     container.appendChild(vizDiv);
 
-    // Clear Button
+    
     const clearBtn = document.createElement('button');
     clearBtn.textContent = 'Löschen';
     clearBtn.style.width = '100%';
     clearBtn.style.margin = '4px 0';
     clearBtn.style.padding = '8px';
-    clearBtn.style.background = '#666';
-    clearBtn.style.color = '#fff';
-    clearBtn.style.border = 'none';
-    clearBtn.style.borderRadius = '4px';
+    clearBtn.style.background = 'rgba(255,255,255,0.08)';
+    clearBtn.style.color = 'var(--qt-text, #eaf1ff)';
+    clearBtn.style.border = '1px solid var(--qt-border, rgba(255,255,255,0.12))';
+    clearBtn.style.borderRadius = '8px';
     clearBtn.style.cursor = 'pointer';
     clearBtn.style.fontSize = '12px';
     container.appendChild(clearBtn);
 
-    // ------------------------------------------------------------
-    // 3. Datenstruktur für Makro
-    // ------------------------------------------------------------
+    
+    
+    
     let recording = false;
     let playing = false;
     let macroEvents = [];
@@ -184,7 +187,7 @@
       });
     }
 
-    // ----- Virtual Key Mapping (erweitert) -----
+    
     function keyCodeToVK(code) {
       const keyMap = {
         'KeyA': 0x41, 'KeyB': 0x42, 'KeyC': 0x43, 'KeyD': 0x44, 'KeyE': 0x45,
@@ -233,7 +236,7 @@
       return keyMap[code] || null;
     }
 
-    // ----- Hilfsfunktionen für echte Events via Debugger/Fallback -----
+    
     async function sendRealKeyDown(code) {
       const vk = keyCodeToVK(code);
       if (!vk) {
@@ -278,7 +281,7 @@
       });
     }
 
-    // fallback: synth events if vk missing (unchanged)
+    
     function synthKeyTap(code, key) {
       return new Promise((resolve) => {
         try {
@@ -336,8 +339,8 @@
       });
     }
 
-    // ----- Canvas für Visualisierung (gleich wie vorher) -----
-    function createVizCanvas() { /* same as before */ 
+    
+    function createVizCanvas() {  
       if (vizCanvas) return;
       vizCanvas = document.createElement('canvas');
       vizCanvas.style.position = 'fixed';
@@ -365,7 +368,7 @@
       }
     }
 
-    function drawVisualization() { /* same as before */
+    function drawVisualization() { 
       if (!vizCtx || !vizCheck.checked) return;
       vizCtx.clearRect(0, 0, vizCanvas.width, vizCanvas.height);
       if (mouseTrail.length > 1) {
@@ -400,9 +403,9 @@
           vizCtx.textAlign = 'center';
           vizCtx.textBaseline = 'middle';
           let short = code.replace('Key', '').replace('Digit', '');
-          if (code === 'Space') short = '␣';
-          else if (code === 'Enter') short = '↵';
-          else if (code === 'ShiftLeft' || code === 'ShiftRight') short = '⇧';
+          if (code === 'Space') short = 'SPACE';
+          else if (code === 'Enter') short = 'ENTER';
+          else if (code === 'ShiftLeft' || code === 'ShiftRight') short = 'SHIFT';
           else if (code === 'ControlLeft' || code === 'ControlRight') short = 'Ctrl';
           else if (code === 'AltLeft' || code === 'AltRight') short = 'Alt';
           vizCtx.fillText(short, x, y);
@@ -416,8 +419,8 @@
       vizFrame = requestAnimationFrame(vizLoop);
     }
 
-    // ------------------------------------------------------------
-    // 4. Event-Handler für Aufnahme (gleich wie vorher)
+    
+    
     function onMouseMove(e) {
       if (!recording) return;
       const now = performance.now() - startTime;
@@ -466,18 +469,18 @@
       });
       addLog(`Taste losgelassen: ${e.code}`);
     }
-    // ------------------------------------------------------------
+    
 
-    // ------------------------------------------------------------
-    // 5. Steuerung Aufnahme/Wiedergabe (playback jetzt mit Down/Up)
+    
+    
     function startRecording() {
       if (recording) return;
       macroEvents = [];
       mouseTrail = [];
       recording = true;
       startTime = performance.now();
-      statusDiv.innerHTML = '🔴 Aufnahme läuft...';
-      statusDiv.style.color = '#f44';
+    statusDiv.innerHTML = 'Aufnahme läuft...';
+      statusDiv.style.color = 'var(--qt-accent, #b78bff)';
       addLog('=== Aufnahme gestartet ===');
 
       if (vizCheck.checked) {
@@ -497,8 +500,8 @@
     function stopRecording() {
       if (!recording) return;
       recording = false;
-      statusDiv.innerHTML = `✓ Aufnahme beendet (${macroEvents.length} Events)`;
-      statusDiv.style.color = '#4f4';
+    statusDiv.innerHTML = `Aufnahme beendet (${macroEvents.length} Events)`;
+      statusDiv.style.color = 'var(--qt-text, #eaf1ff)';
       addLog(`=== Aufnahme gestoppt (${macroEvents.length} Events) ===`);
 
       document.removeEventListener('mousemove', onMouseMove);
@@ -518,22 +521,22 @@
 
     async function playMacro() {
       if (playing || macroEvents.length === 0) {
-        if (macroEvents.length === 0) addLog('⚠️ Keine aufgezeichneten Events!');
+    if (macroEvents.length === 0) addLog('Warnung: Keine aufgezeichneten Events.');
         return;
       }
 
       playing = true;
-      statusDiv.innerHTML = '▶️ Wiedergabe läuft...';
-      statusDiv.style.color = '#44f';
+      statusDiv.innerHTML = 'Wiedergabe läuft...';
+      statusDiv.style.color = 'var(--qt-accent, #b78bff)';
       addLog('=== Wiedergabe gestartet ===');
       const speed = parseFloat(speedSlider.value);
 
       const attached = await attachDebuggerIfNeeded();
       if (!attached) {
-        addLog('❌ Debugger konnte nicht gestartet werden. Wiedergabe abgebrochen.');
+    addLog('Fehler: Debugger konnte nicht gestartet werden. Wiedergabe abgebrochen.');
         playing = false;
         statusDiv.innerHTML = 'Fehler: Debugger nicht verfügbar';
-        statusDiv.style.color = '#f44';
+        statusDiv.style.color = 'rgba(255, 140, 140, 0.9)';
         return;
       }
 
@@ -547,25 +550,25 @@
           if (ev.type === 'mousemove') {
             const mouseEvent = new MouseEvent('mousemove', { clientX: ev.data.x, clientY: ev.data.y, bubbles: true, cancelable: true, view: window });
             document.dispatchEvent(mouseEvent);
-            addLog(`▶️ Mausbewegung (${ev.data.x}, ${ev.data.y})`);
+            addLog(`Mausbewegung (${ev.data.x}, ${ev.data.y})`);
           } else if (ev.type === 'mousedown') {
             await sendRealMouseDown(ev.data.x, ev.data.y, ev.data.button);
-            addLog(`▶️ Mausklick unten Button ${ev.data.button}`);
+            addLog(`Mausklick unten Button ${ev.data.button}`);
           } else if (ev.type === 'mouseup') {
             await sendRealMouseUp(ev.data.x, ev.data.y, ev.data.button);
-            addLog(`▶️ Mausklick oben Button ${ev.data.button}`);
+            addLog(`Mausklick oben Button ${ev.data.button}`);
           } else if (ev.type === 'keydown') {
-            // send native keyDown (no keyUp yet) to simulate holding
+            
             await sendRealKeyDown(ev.data.code);
-            addLog(`▶️ keyDown gesendet: ${ev.data.code}`);
+            addLog(`keyDown gesendet: ${ev.data.code}`);
           } else if (ev.type === 'keyup') {
-            // send native keyUp to release
+            
             await sendRealKeyUp(ev.data.code);
-            addLog(`▶️ keyUp gesendet: ${ev.data.code}`);
+            addLog(`keyUp gesendet: ${ev.data.code}`);
           }
         } catch (err) {
           const errorMsg = err?.message || String(err) || 'Unbekannter Fehler';
-          addLog(`⚠️ Fehler: ${errorMsg}`);
+      addLog(`Fehler: ${errorMsg}`);
           console.error('Playback error:', err);
         }
       }
@@ -573,8 +576,8 @@
       async function scheduleNext() {
         if (events.length === 0) {
           playing = false;
-          statusDiv.innerHTML = '✓ Wiedergabe beendet';
-          statusDiv.style.color = '#4f4';
+    statusDiv.innerHTML = 'Wiedergabe beendet';
+          statusDiv.style.color = 'var(--qt-text, #eaf1ff)';
           addLog('=== Wiedergabe beendet ===');
           currentPlaybackTimeout = null;
           return;
@@ -600,7 +603,7 @@
       }
       playing = false;
       statusDiv.innerHTML = 'Wiedergabe abgebrochen';
-      statusDiv.style.color = '#f44';
+      statusDiv.style.color = 'rgba(255, 140, 140, 0.9)';
       addLog('=== Wiedergabe abgebrochen ===');
     }
 
@@ -610,20 +613,20 @@
       macroEvents = [];
       mouseTrail = [];
       statusDiv.innerHTML = 'Bereit';
-      statusDiv.style.color = '#fff';
+      statusDiv.style.color = 'var(--qt-text, #eaf1ff)';
       logDiv.innerHTML = '';
       addLog('Makro gelöscht');
     }
 
-    // ------------------------------------------------------------
-    // 6. Button-Handler
+    
+    
     recordBtn.onclick = startRecording;
     stopBtn.onclick = stopRecording;
     playBtn.onclick = playMacro;
     clearBtn.onclick = clearMacro;
 
-    // ------------------------------------------------------------
-    // 7. Globale Tasten F1, F2, F3
+    
+    
     const keyHandler = (e) => {
       if (e.code === 'F1') { e.preventDefault(); startRecording(); }
       else if (e.code === 'F2') { e.preventDefault(); stopRecording(); }
@@ -631,8 +634,8 @@
     };
     document.addEventListener('keydown', keyHandler);
 
-    // ------------------------------------------------------------
-    // 8. Aufräumen
+    
+    
     window.addEventListener('beforeunload', () => {
       document.removeEventListener('keydown', keyHandler);
       if (recording) stopRecording();

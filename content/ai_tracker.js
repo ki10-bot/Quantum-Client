@@ -4,18 +4,21 @@
 
   t.aiTracker = function() {
 
-    // ---------------------------
-    // UI (unverändert, keine Logik-Änderungen)
-    // ---------------------------
+    
+    
+    
     let aiBtn;
     try {
       aiBtn = t.createIconButton('ai', 56, 65, 35);
     } catch {
-      aiBtn = t.createButton('🧠');
+      aiBtn = t.createButton('AI');
       aiBtn.style.width = '56px';
       aiBtn.style.height = '65px';
-      aiBtn.style.fontSize = '24px';
-      aiBtn.style.lineHeight = '65px';
+      aiBtn.style.fontSize = '12px';
+      aiBtn.style.lineHeight = '16px';
+      aiBtn.style.display = 'flex';
+      aiBtn.style.alignItems = 'center';
+      aiBtn.style.justifyContent = 'center';
     }
 
     const aiWin = t.createWindow('YOLOv8 Tracker', '400px', '250px', '380px', '520px');
@@ -27,11 +30,13 @@
     aiWin.appendChild(container);
 
     const statusDiv = document.createElement('div');
-    statusDiv.innerHTML = '⏸️ Gestoppt';
+    statusDiv.style.fontSize = '13px';
+    statusDiv.style.marginBottom = '6px';
+    statusDiv.textContent = 'Gestoppt';
     container.appendChild(statusDiv);
 
     const errorDiv = document.createElement('div');
-    errorDiv.style.color = '#faa';
+    errorDiv.style.color = 'rgba(255, 140, 140, 0.9)';
     errorDiv.style.fontSize = '12px';
     container.appendChild(errorDiv);
 
@@ -39,6 +44,10 @@
     toggleBtn.textContent = 'Starten';
     toggleBtn.style.width = '100%';
     toggleBtn.style.marginTop = '8px';
+    toggleBtn.style.background = 'rgba(255,255,255,0.12)';
+    toggleBtn.style.color = 'var(--qt-text, #eaf1ff)';
+    toggleBtn.style.border = '1px solid var(--qt-border, rgba(255,255,255,0.12))';
+    toggleBtn.style.borderRadius = '8px';
     container.appendChild(toggleBtn);
 
     const confSlider = document.createElement('input');
@@ -50,9 +59,9 @@
     confSlider.style.width = '100%';
     container.appendChild(confSlider);
 
-    // ---------------------------
-    // Overlay Canvas (unverändert)
-    // ---------------------------
+    
+    
+    
     const canvas = document.createElement('canvas');
     canvas.style.position = 'fixed';
     canvas.style.top = 0;
@@ -68,23 +77,23 @@
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    // ---------------------------
-    // Zustand + Parameter
-    // ---------------------------
+    
+    
+    
     let session = null;
     let inputName = null;
     let outputName = null;
     let active = false;
     let processing = false;
 
-    // Performance knobs
-    const MODEL_INPUT_SIZE = 320; // 320 faster; set to 640 if PC is strong
+    
+    const MODEL_INPUT_SIZE = 320; 
     const MIN_INFERENCE_INTERVAL = 150;
     let lastInferenceTime = 0;
 
-    // Candidate ORT script paths (relative to extension root)
-    // Keep them in the extension and listed in web_accessible_resources in manifest.json:
-    // e.g. "ort/*" or "libs/onnx/*"
+    
+    
+    
     const ORT_CANDIDATES = [
       'ort/ort.min.js',
       'ort/ort.wasm.js',
@@ -92,16 +101,16 @@
       'libs/onnx/ort.wasm.js'
     ];
 
-    // Candidate model paths (relative to extension root)
+    
     const MODEL_CANDIDATES = [
       'models/yolov8n.onnx',
       'yolov8n.onnx',
       'model/yolov8n.onnx'
     ];
 
-    // ---------------------------
-    // Helper: extension-safe getURL
-    // ---------------------------
+    
+    
+    
     function getExtURL(path) {
       if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.getURL) {
         return chrome.runtime.getURL(path);
@@ -112,9 +121,9 @@
       throw new Error('Extension runtime API nicht verfügbar: chrome.runtime.getURL fehlt');
     }
 
-    // ---------------------------
-    // Helper: prüfe ob extension-URL erreichbar (fetch), returns true/false
-    // ---------------------------
+    
+    
+    
     async function urlExists(url) {
       try {
         const r = await fetch(url, { method: 'GET' });
@@ -124,22 +133,22 @@
       }
     }
 
-    // ---------------------------
-    // Lade Script nur wenn die URL erreichbar ist (verhindert chrome-extension://invalid)
-    // ---------------------------
+    
+    
+    
     async function loadScriptIfAvailable(relPath) {
       const url = getExtURL(relPath);
       console.log('[ai_tracker] trying loadScriptIfAvailable ->', url);
-      // quick existence check
+      
       const ok = await urlExists(url);
       if (!ok) {
         console.warn('[ai_tracker] resource not reachable (or not web_accessible_resources):', url);
         throw new Error('resource not reachable: ' + url);
       }
-      // inject script tag
+      
       return new Promise((resolve, reject) => {
         try {
-          // avoid double-inserting same script
+          
           if (Array.from(document.scripts).some(s => s.src === url)) {
             console.log('[ai_tracker] script already inserted:', url);
             resolve(url);
@@ -162,20 +171,20 @@
       });
     }
 
-    // ---------------------------
-    // Lade ORT: prüfe Kandidaten, lade erstes erreichbares Skript und setze wasmPaths
-    // ---------------------------
+    
+    
+    
     async function loadOrtLocal() {
       if (window.ort) {
         console.log('[ai_tracker] ort already present');
         try {
           if (ort && ort.env && ort.env.wasm) {
-            // attempt to set wasmPaths to default "ort/" if exists
+            
             const defaultFolder = getExtURL('ort/');
             ort.env.wasm.wasmPaths = defaultFolder;
             console.log('[ai_tracker] set default wasmPaths ->', defaultFolder);
           }
-        } catch (e) { /* ignore */ }
+        } catch (e) {  }
         return;
       }
 
@@ -183,7 +192,7 @@
       for (const rel of ORT_CANDIDATES) {
         try {
           await loadScriptIfAvailable(rel);
-          // after load: set wasmPaths to folder
+          
           try {
             const folderUrl = getExtURL(rel.substring(0, rel.lastIndexOf('/') + 1));
             if (window.ort && ort.env && ort.env.wasm) {
@@ -196,7 +205,7 @@
             console.warn('[ai_tracker] could not set wasmPaths for', rel, e);
           }
           if (window.ort) return;
-          // some builds may attach ort later; continue trying other candidates
+          
         } catch (e) {
           lastError = e;
           console.warn('[ai_tracker] loadScriptIfAvailable failed for', rel, e.message);
@@ -205,9 +214,9 @@
       throw new Error('Keine ORT-Skripte konnten geladen werden. Letzter Fehler: ' + (lastError && lastError.message));
     }
 
-    // ---------------------------
-    // Wähle Modell-URL: erste erreichbare Datei von MODEL_CANDIDATES
-    // ---------------------------
+    
+    
+    
     async function pickModelUrl() {
       for (const rel of MODEL_CANDIDATES) {
         try {
@@ -215,25 +224,25 @@
           console.log('[ai_tracker] check model url', url);
           if (await urlExists(url)) return url;
         } catch (e) {
-          // ignore
+          
         }
       }
-      // fallback: return first candidate url (so session creation can fail with a clear error)
+      
       return getExtURL(MODEL_CANDIDATES[0]);
     }
 
-    // ---------------------------
-    // Lade Modell mit WebGL -> WASM Fallback; set input/output names after session ready
-    // ---------------------------
+    
+    
+    
     async function loadModelWithFallback() {
-      statusDiv.innerHTML = '⏳ Lade ONNX Runtime...';
+      statusDiv.innerHTML = 'Lade ONNX Runtime...';
       errorDiv.innerHTML = '';
       try {
         await loadOrtLocal();
       } catch (e) {
         console.error('[ai_tracker] ort load failed', e);
-        errorDiv.innerText = '❌ ort konnte nicht geladen werden: ' + (e.message || e.toString());
-        statusDiv.innerHTML = '⏸️ Gestoppt';
+        errorDiv.innerText = 'ort konnte nicht geladen werden: ' + (e.message || e.toString());
+        statusDiv.innerHTML = 'Gestoppt';
         return false;
       }
 
@@ -241,16 +250,16 @@
       try {
         modelUrl = await pickModelUrl();
       } catch (e) {
-        errorDiv.innerText = '❌ Modell nicht gefunden: ' + (e.message || e.toString());
-        statusDiv.innerHTML = '⏸️ Gestoppt';
+        errorDiv.innerText = 'Modell nicht gefunden: ' + (e.message || e.toString());
+        statusDiv.innerHTML = 'Gestoppt';
         return false;
       }
 
-      statusDiv.innerHTML = '⏳ Lade Modell... (versuche WebGL)';
-      // Versuch WebGL
+      statusDiv.innerHTML = 'Lade Modell... (versuche WebGL)';
+      
       try {
         session = await ort.InferenceSession.create(modelUrl, { executionProviders: ['webgl'] });
-        statusDiv.innerHTML = '✅ Modell geladen (WebGL)';
+        statusDiv.innerHTML = 'Modell geladen (WebGL)';
         console.log('[ai_tracker] session created with webgl');
       } catch (e) {
         console.warn('[ai_tracker] webgl session failed', e);
@@ -258,25 +267,25 @@
 
       if (!session) {
         try {
-          statusDiv.innerHTML = '⏳ Lade Modell... (WASM fallback)';
+          statusDiv.innerHTML = 'Lade Modell... (WASM fallback)';
           session = await ort.InferenceSession.create(modelUrl, { executionProviders: ['wasm'] });
-          statusDiv.innerHTML = '✅ Modell geladen (WASM)';
+          statusDiv.innerHTML = 'Modell geladen (WASM)';
           console.log('[ai_tracker] session created with wasm');
         } catch (e) {
           console.error('[ai_tracker] wasm session failed', e);
-          errorDiv.innerText = '❌ Modell konnte nicht initialisiert werden: ' + (e.message || e.toString());
-          statusDiv.innerHTML = '⏸️ Gestoppt';
+          errorDiv.innerText = 'Modell konnte nicht initialisiert werden: ' + (e.message || e.toString());
+          statusDiv.innerHTML = 'Gestoppt';
           return false;
         }
       }
 
-      // determine input & output names reliably
+      
       try {
         inputName = Array.isArray(session.inputNames) && session.inputNames.length ? session.inputNames[0] : null;
         outputName = Array.isArray(session.outputNames) && session.outputNames.length ? session.outputNames[0] : null;
-        // fallback: try to inspect session.modelMetadata if available (some builds differ)
+        
         if (!inputName || !outputName) {
-          // try to get from session._modelRunner or session.outputNames fallback (best-effort)
+          
           inputName = session.inputNames && session.inputNames[0] ? session.inputNames[0] : inputName;
           outputName = session.outputNames && session.outputNames[0] ? session.outputNames[0] : outputName;
         }
@@ -288,9 +297,9 @@
       return true;
     }
 
-    // ---------------------------
-    // Preprocess & Tensor creation
-    // ---------------------------
+    
+    
+    
     function preprocessGameCanvas(gameCanvas) {
       const tmp = document.createElement('canvas');
       tmp.width = MODEL_INPUT_SIZE;
@@ -309,9 +318,9 @@
       return new ort.Tensor('float32', floatData, [1, 3, MODEL_INPUT_SIZE, MODEL_INPUT_SIZE]);
     }
 
-    // ---------------------------
-    // Decode + Draw (same approach as before)
-    // ---------------------------
+    
+    
+    
     function simpleDecodeAndDraw(outputTensor, gameCanvasRect) {
       if (!outputTensor) return;
       const data = outputTensor.data;
@@ -321,6 +330,7 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const scaleX = canvas.width / gameCanvasRect.width;
       const scaleY = canvas.height / gameCanvasRect.height;
+      const fontFamily = getComputedStyle(aiWin).fontFamily || 'Arial, sans-serif';
 
       function drawBoxModelCoords(cx, cy, w, h, score) {
         const x1 = cx - w / 2;
@@ -333,7 +343,7 @@
         ctx.lineWidth = 2;
         ctx.strokeRect(sx * scaleX, sy * scaleY, sw * scaleX, sh * scaleY);
         ctx.fillStyle = '#00ff00';
-        ctx.font = '14px Arial';
+        ctx.font = `14px ${fontFamily}`;
         ctx.fillText('Spieler ' + score.toFixed(2), sx * scaleX, Math.max(12, sy * scaleY - 4));
       }
 
@@ -372,9 +382,9 @@
       }
     }
 
-    // ---------------------------
-    // Detection loop (throttled)
-    // ---------------------------
+    
+    
+    
     async function detectOnce() {
       if (!active || processing || !session) return;
       const now = performance.now();
@@ -396,7 +406,7 @@
         const outputMap = await session.run(feeds);
         const t1 = performance.now();
         const infMs = Math.round(t1 - t0);
-        statusDiv.innerHTML = `▶️ Aktiv — Inferenz ${infMs} ms`;
+        statusDiv.innerHTML = `Aktiv — Inferenz ${infMs} ms`;
 
         const usedOutput = outputName || (session.outputNames && session.outputNames[0]) || Object.keys(outputMap)[0];
         const outTensor = outputMap[usedOutput];
@@ -404,7 +414,7 @@
         simpleDecodeAndDraw(outTensor, rect);
       } catch (e) {
         console.error('[ai_tracker] Detection error', e);
-        errorDiv.innerText = '❌ Detection Fehler: ' + (e.message || e.toString());
+        errorDiv.innerText = 'Detection Fehler: ' + (e.message || e.toString());
       } finally {
         processing = false;
       }
@@ -415,9 +425,9 @@
       detectOnce().then(() => requestAnimationFrame(loop));
     }
 
-    // ---------------------------
-    // Toggle logic (UI-Button bleibt unverändert)
-    // ---------------------------
+    
+    
+    
     toggleBtn.onclick = async () => {
       if (!active) {
         if (!session) {
@@ -427,19 +437,23 @@
         }
         active = true;
         toggleBtn.textContent = 'Stoppen';
-        statusDiv.innerHTML = '▶️ Aktiv';
+        toggleBtn.style.background = 'var(--qt-accent, #b78bff)';
+        toggleBtn.style.color = '#111';
+        statusDiv.innerHTML = 'Aktiv';
         errorDiv.innerText = '';
         lastInferenceTime = 0;
         loop();
       } else {
         active = false;
         toggleBtn.textContent = 'Starten';
-        statusDiv.innerHTML = '⏸️ Gestoppt';
+        toggleBtn.style.background = 'rgba(255,255,255,0.12)';
+        toggleBtn.style.color = 'var(--qt-text, #eaf1ff)';
+        statusDiv.innerHTML = 'Gestoppt';
         ctx.clearRect(0, 0, canvas.width, canvas.height);
       }
     };
 
-    // Cleanup
+    
     window.addEventListener('beforeunload', () => {
       active = false;
       canvas.remove();

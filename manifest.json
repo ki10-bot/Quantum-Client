@@ -8,19 +8,12 @@
     "default_title": "By KI10sus and Cipheron"
   }, 
   "version": "1.0",
-  "permissions": ["tabs", "debugger", "activeTab", "storage",
-  "https://taming.io/*",
-  "https://cdn.jsdelivr.net/*",
-  "https://unpkg.com/*",
-  "https://cdnjs.cloudflare.com/*",
-    "contextMenus"],
+  "permissions": ["tabs", "debugger", "activeTab", "storage", "contextMenus"],
   "host_permissions": ["https://taming.io/*","https://cdn.jsdelivr.net/*",
     "https://unpkg.com/*","https://tfhub.dev/*",
-    "https://cdnjs.cloudflare.com/*", "<all_urls>"],
+    "https://cdnjs.cloudflare.com/*","https://translate.googleapis.com/*", "<all_urls>"],
   "background": {
-    "service_worker": "background.js",
-    "scripts": ["background.js"],
-    "persistent": true
+    "service_worker": "background.js"
   },
   "content_scripts": [
     {
@@ -49,14 +42,14 @@
         "content/shader_hacker.js",
         "content/edit_moment.js",
         "content/splash.js",
-        "content/main.js",
-        "content/quantum_menu.js"
+        "content/quantum_menu.js",
+        "content/main.js"
       ],
       "run_at": "document_idle"
     }
   ],
   "web_accessible_resources": [{
-    "resources": ["icons/*.png", "assets/*.png", "utils/*.png", "fonts/*.ttf", "utils/*.mp3", "utils/face/*.png", "model/*", "ort/*"],
+    "resources": ["icons/*.png", "assets/*.png", "utils/*.png", "fonts/*.ttf", "fonts/*.json", "utils/*.mp3", "utils/face/*.png", "model/*", "ort/*"],
     "matches": ["https://taming.io/*", "<all_urls>"]
   }],
   "cross_origin_embedder_policy": {

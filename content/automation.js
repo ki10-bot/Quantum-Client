@@ -3,19 +3,22 @@
   const t = window.taming;
 
   t.automation = function(overlay) {
-    // ------------------------------------------------------------
-    // 1. Button mit Fallback
-    // ------------------------------------------------------------
+    
+    
+    
     let autoBtn;
     try {
       autoBtn = t.createIconButton('auto', 56, 65, 35);
     } catch (e) {
-      autoBtn = t.createButton('🤖');
+      autoBtn = t.createButton('Auto');
       autoBtn.style.width = '56px';
       autoBtn.style.height = '65px';
-      autoBtn.style.fontSize = '24px';
-      autoBtn.style.lineHeight = '65px';
+      autoBtn.style.fontSize = '12px';
+      autoBtn.style.lineHeight = '16px';
       autoBtn.style.padding = '0';
+      autoBtn.style.display = 'flex';
+      autoBtn.style.alignItems = 'center';
+      autoBtn.style.justifyContent = 'center';
     }
 
     const autoWin = t.createWindow('Automation', '250px', '200px', '380px', '400px');
@@ -25,10 +28,10 @@
       autoWin.style.display = autoWin.style.display === 'none' ? 'block' : 'none';
     };
 
-    // ------------------------------------------------------------
-    // 2. Variablen und Hilfsfunktionen
-    // ------------------------------------------------------------
-    const actions = []; // { triggerKey, actionType, actionKey, delay }
+    
+    
+    
+    const actions = []; 
     let debuggerReady = false;
 
     async function attachDebuggerIfNeeded() {
@@ -47,7 +50,7 @@
       });
     }
 
-    // Klick senden
+    
     async function sendRealClick() {
       const x = t.lastMouseX;
       const y = t.lastMouseY;
@@ -82,10 +85,10 @@
       });
     }
 
-    // Tastendruck simulieren
+    
     async function sendKeyPress(keyCode) {
-      // keyCode ist z.B. "KeyW" – für den Debugger brauchen wir den Windows Virtual Key Code
-      // Wir können eine Map von e.code zu Windows VK erstellen (vereinfacht)
+      
+      
       const keyMap = {
         'KeyA': 0x41, 'KeyB': 0x42, 'KeyC': 0x43, 'KeyD': 0x44, 'KeyE': 0x45,
         'KeyF': 0x46, 'KeyG': 0x47, 'KeyH': 0x48, 'KeyI': 0x49, 'KeyJ': 0x4A,
@@ -139,9 +142,9 @@
 
     const keyPressTimers = {};
 
-    // ------------------------------------------------------------
-    // 3. Zeile hinzufügen (UI)
-    // ------------------------------------------------------------
+    
+    
+    
     function addRow() {
       const row = document.createElement('div');
       row.style.display = 'flex';
@@ -152,7 +155,7 @@
       row.style.background = 'rgba(30,30,35,0.6)';
       row.style.borderRadius = '6px';
 
-      // Trigger-Zeile
+      
       const triggerRow = document.createElement('div');
       triggerRow.style.display = 'flex';
       triggerRow.style.alignItems = 'center';
@@ -162,7 +165,7 @@
       triggerBtn.textContent = 'Trigger';
       triggerBtn.style.flex = '1';
 
-      // Action-Zeile
+      
       const actionRow = document.createElement('div');
       actionRow.style.display = 'flex';
       actionRow.style.alignItems = 'center';
@@ -179,10 +182,11 @@
       actionKeyBtn.textContent = 'Taste wählen';
       actionKeyBtn.style.display = 'none';
 
-      // Test-Button
+      
       const testBtn = document.createElement('button');
       testBtn.textContent = 'Test';
-      testBtn.style.background = '#4a6';
+      testBtn.style.background = 'var(--qt-accent, #b78bff)';
+      testBtn.style.color = '#0c0f16';
       testBtn.onclick = async () => {
         console.log('Test-Button gedrückt für Action:', obj.actionType, obj.actionKey);
         if (!debuggerReady) {
@@ -199,7 +203,7 @@
         }
       };
 
-      // Delay-Slider
+      
       const slider = document.createElement('input');
       slider.type = 'range';
       slider.min = 0;
@@ -210,15 +214,16 @@
       const label = document.createElement('div');
       label.textContent = 'Delay: 100ms';
       label.style.fontSize = '11px';
-      label.style.color = '#aaa';
+      label.style.color = 'var(--qt-text, #eaf1ff)';
+      label.style.opacity = '0.7';
 
       slider.oninput = () => {
         label.textContent = `Delay: ${slider.value}ms`;
       };
 
-      // Lösch-Button
+      
       const removeBtn = document.createElement('button');
-      removeBtn.textContent = '🗑️';
+      removeBtn.textContent = 'Del';
       removeBtn.style.marginLeft = '4px';
       removeBtn.onclick = () => {
         const index = actions.indexOf(obj);
@@ -226,7 +231,7 @@
         row.remove();
       };
 
-      // Action-Objekt
+      
       const obj = {
         triggerKey: null,
         actionType: 'click',
@@ -234,7 +239,7 @@
         get delay() { return parseInt(slider.value); }
       };
 
-      // ---- Trigger festlegen (Tastatur oder Maus) ----
+      
       triggerBtn.onclick = () => {
         const box = document.createElement('div');
         box.textContent = 'Trigger-Taste oder Maustaste drücken (ESC = abbrechen)';
@@ -247,7 +252,7 @@
 
         const keyHandler = (e) => {
           e.preventDefault();
-          obj.triggerKey = e.code; // z.B. "KeyW"
+          obj.triggerKey = e.code; 
           triggerBtn.textContent = e.code;
           cleanup();
         };
@@ -278,7 +283,7 @@
         document.addEventListener('mousedown', mouseHandler);
       };
 
-      // Action-Typ umschalten
+      
       actionTypeSelect.onchange = () => {
         obj.actionType = actionTypeSelect.value;
         if (obj.actionType === 'key') {
@@ -289,7 +294,7 @@
         }
       };
 
-      // Action-Taste festlegen (nur Tastatur)
+      
       actionKeyBtn.onclick = () => {
         const box = document.createElement('div');
         box.textContent = 'Action-Taste drücken (ESC = abbrechen)';
@@ -319,7 +324,7 @@
         document.addEventListener('keydown', escHandler);
       };
 
-      // Zusammenbau
+      
       triggerRow.appendChild(triggerBtn);
       triggerRow.appendChild(removeBtn);
       row.appendChild(triggerRow);
@@ -336,19 +341,19 @@
       actions.push(obj);
     }
 
-    // Erste Reihe
+    
     addRow();
 
-    // Plus-Button
+    
     const addBtn = document.createElement('button');
     addBtn.textContent = '+';
     addBtn.style.margin = '4px';
     addBtn.onclick = addRow;
     autoWin.appendChild(addBtn);
 
-    // ------------------------------------------------------------
-    // 4. Globaler Listener für Trigger (Tastatur und Maus)
-    // ------------------------------------------------------------
+    
+    
+    
     document.addEventListener('keydown', async (e) => {
       if (e.target.matches('input, textarea, [contenteditable="true"]')) return;
       for (const a of actions) {
@@ -370,8 +375,10 @@
     }, true);
 
     document.addEventListener('mousedown', async (e) => {
-      // Nur auslösen, wenn nicht in einem interaktiven Element
-      if (e.target.closest('button, select, input, textarea')) return;
+      
+      const target = e.target && e.target.nodeType === 3 ? e.target.parentElement : e.target;
+      if (!target || typeof target.closest !== 'function') return;
+      if (target.closest('button, select, input, textarea')) return;
       let btn = '';
       if (e.button === 0) btn = 'MouseLeft';
       else if (e.button === 1) btn = 'MouseMiddle';

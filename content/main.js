@@ -5,33 +5,37 @@
 
   const t = window.taming;
 
-  // Hauptfenster
+  
   const overlay = t.createWindow('', localStorage.getItem('overlayTop') || '100px', localStorage.getItem('overlayLeft') || '100px');
   overlay.id = 'taming-overlay';
+  overlay.dataset.qtTitle = 'Main Overlay';
+  if (t.disableWindowClose) t.disableWindowClose(overlay);
   overlay.style.position = 'relative';
   overlay.style.padding = '4px 10px';
   overlay.style.minWidth = '200px';
 
-  // Container für die Modul-Buttons
+  
   const modulesWrapper = document.createElement('div');
+  modulesWrapper.classList.add('qt-modules');
   modulesWrapper.style.display = 'flex';
   modulesWrapper.style.flexWrap = 'nowrap';
+  modulesWrapper.style.alignItems = 'center';
   modulesWrapper.style.gap = '4px';
   modulesWrapper.style.justifyContent = 'center';
   modulesWrapper.style.transition = 'opacity 0.2s ease';
   modulesWrapper.style.opacity = '1';
   overlay.appendChild(modulesWrapper);
 
-  // Keybind-Box erstellen
+  
   t.keybindBox = t.createWindow('Keybind', '50%', '50%', '220px', '60px');
   t.keybindBox.style.transform = 'translate(-50%, -50%)';
   t.keybindBox.style.fontSize = '16px';
   t.keybindBox.style.display = 'none';
 
-  // Module initialisieren und Buttons sammeln
+  
   const moduleButtons = [];
 
-  // Graph
+  
   const graphBtn = t.graph(overlay);
   if (graphBtn) {
     moduleButtons.push(graphBtn);
@@ -40,7 +44,7 @@
     modulesWrapper.appendChild(graphBtn);
   }
 
-  // Scale
+  
   const scaleBtn = t.scale(overlay);
   if (scaleBtn) {
     moduleButtons.push(scaleBtn);
@@ -49,7 +53,7 @@
     modulesWrapper.appendChild(scaleBtn);
   }
 
-  // Automation
+  
   const autoBtn = t.automation(overlay);
   if (autoBtn) {
     moduleButtons.push(autoBtn);
@@ -58,7 +62,7 @@
     modulesWrapper.appendChild(autoBtn);
   }
 
-  // ESP
+  
   const espBtn = t.esp(overlay);
   if (espBtn) {
     moduleButtons.push(espBtn);
@@ -67,7 +71,7 @@
     modulesWrapper.appendChild(espBtn);
   }
 
-  // Themer
+  
   const themeBtn = t.themer(overlay);
   if (themeBtn) {
     moduleButtons.push(themeBtn);
@@ -76,7 +80,7 @@
     modulesWrapper.appendChild(themeBtn);
   }
 
-  // Tracker
+  
   const trackerBtn = t.tracker(overlay);
   if (trackerBtn) {
     moduleButtons.push(trackerBtn);
@@ -84,7 +88,7 @@
     t.attachKeybind(trackerBtn);
     modulesWrapper.appendChild(trackerBtn);
   }
-  // In main.js nach den anderen Modulen:
+  
   const netBtn = t.network(overlay);
   if (netBtn) {
     moduleButtons.push(netBtn);
@@ -181,7 +185,6 @@
     modulesWrapper.appendChild(macroBtn);
   }
 
-    // Nach den anderen Modulen
   const hiderBtn = t.adblockHider(overlay);
   if (hiderBtn) {
     moduleButtons.push(hiderBtn);
@@ -198,7 +201,27 @@
     modulesWrapper.appendChild(themeChangerBtn);
   }
 
-  // Navigation (Pfeile) – benötigt moduleButtons
-  t.navigation(overlay, moduleButtons);
-  t.quantumMenu();
+  try {
+    t.navigation(overlay, moduleButtons);
+  } catch (err) {
+    console.warn('Navigation konnte nicht geladen werden:', err);
+  }
+  if (typeof t.quantumMenu === 'function') {
+    t.quantumMenu();
+  } else {
+    console.warn('quantumMenu nicht verfügbar (content/quantum_menu.js fehlt oder lädt nicht).');
+  }
+
+  if (typeof t.maybeShowGuide === 'function') {
+    if (typeof t.whenSettingsLoaded === 'function') {
+      t.whenSettingsLoaded(() => {
+        if (typeof t.applyLanguageToScope === 'function') {
+          t.applyLanguageToScope(document, t.language || 'original');
+        }
+        t.maybeShowGuide();
+      });
+    } else {
+      t.maybeShowGuide();
+    }
+  }
 })();

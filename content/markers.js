@@ -3,19 +3,22 @@
   const t = window.taming;
 
   t.markers = function(overlay) {
-    // ------------------------------------------------------------
-    // 1. Button mit Fallback
-    // ------------------------------------------------------------
+    
+    
+    
     let markerBtn;
     try {
       markerBtn = t.createIconButton('marker', 56, 65, 35);
     } catch (e) {
-      markerBtn = t.createButton('📍');
+      markerBtn = t.createButton('Mark');
       markerBtn.style.width = '56px';
       markerBtn.style.height = '65px';
-      markerBtn.style.fontSize = '24px';
-      markerBtn.style.lineHeight = '65px';
+      markerBtn.style.fontSize = '11px';
+      markerBtn.style.lineHeight = '16px';
       markerBtn.style.padding = '0';
+      markerBtn.style.display = 'flex';
+      markerBtn.style.alignItems = 'center';
+      markerBtn.style.justifyContent = 'center';
     }
 
     const markerWin = t.createWindow('Screen-Marker', '400px', '250px', '300px', '300px');
@@ -25,9 +28,9 @@
       markerWin.style.display = markerWin.style.display === 'none' ? 'block' : 'none';
     };
 
-    // ------------------------------------------------------------
-    // 2. UI-Elemente
-    // ------------------------------------------------------------
+    
+    
+    
     const container = document.createElement('div');
     container.style.padding = '4px';
     markerWin.appendChild(container);
@@ -41,7 +44,8 @@
     const instructions = document.createElement('div');
     instructions.style.margin = '4px';
     instructions.style.fontSize = '12px';
-    instructions.style.color = '#aaa';
+    instructions.style.color = 'var(--qt-text, #eaf1ff)';
+    instructions.style.opacity = '0.7';
     instructions.innerHTML = 'Taste zum Setzen: <span id="marker-key">F</span>';
     container.appendChild(instructions);
 
@@ -51,13 +55,13 @@
     keyInput.readOnly = true;
     keyInput.style.width = '100%';
     keyInput.style.margin = '4px 0';
-    keyInput.style.background = '#333';
-    keyInput.style.color = '#fff';
-    keyInput.style.border = '1px solid #555';
+    keyInput.style.background = 'rgba(22, 24, 32, 0.9)';
+    keyInput.style.color = 'var(--qt-text, #eaf1ff)';
+    keyInput.style.border = '1px solid var(--qt-border, rgba(255,255,255,0.12))';
     keyInput.style.padding = '4px';
     container.appendChild(keyInput);
 
-    // Aktuelle Taste
+    
     let markerKey = 'KeyF';
     keyInput.value = 'F';
 
@@ -72,35 +76,35 @@
       document.addEventListener('keydown', handler);
     });
 
-    // Lösch-Button
+    
     const clearBtn = document.createElement('button');
     clearBtn.textContent = 'Alle Marker löschen';
     clearBtn.style.width = '100%';
     clearBtn.style.margin = '4px 0';
     clearBtn.style.padding = '4px';
-    clearBtn.style.background = '#a44';
-    clearBtn.style.color = '#fff';
-    clearBtn.style.border = 'none';
-    clearBtn.style.borderRadius = '4px';
+    clearBtn.style.background = 'rgba(255,255,255,0.08)';
+    clearBtn.style.color = 'var(--qt-text, #eaf1ff)';
+    clearBtn.style.border = '1px solid var(--qt-border, rgba(255,255,255,0.12))';
+    clearBtn.style.borderRadius = '8px';
     clearBtn.style.cursor = 'pointer';
     container.appendChild(clearBtn);
 
-    // Liste der Marker (einfach)
+    
     const listDiv = document.createElement('div');
     listDiv.style.maxHeight = '120px';
     listDiv.style.overflowY = 'auto';
     listDiv.style.fontSize = '12px';
     listDiv.style.marginTop = '4px';
-    listDiv.style.background = 'rgba(0,0,0,0.3)';
+    listDiv.style.background = 'rgba(10, 12, 18, 0.4)';
     listDiv.style.padding = '2px';
     container.appendChild(listDiv);
 
-    // ------------------------------------------------------------
-    // 3. Marker-Daten und Overlay
-    // ------------------------------------------------------------
-    let markers = []; // { x, y, label, color }
+    
+    
+    
+    let markers = []; 
 
-    // Canvas für die Anzeige
+    
     const canvas = document.createElement('canvas');
     canvas.style.position = 'fixed';
     canvas.style.top = '0';
@@ -119,7 +123,7 @@
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    // Marker setzen (an aktueller Mausposition)
+    
     function addMarker() {
       const x = t.lastMouseX;
       const y = t.lastMouseY;
@@ -133,22 +137,22 @@
       updateList();
     }
 
-    // Marker löschen (per Klick auf Liste)
+    
     function removeMarker(index) {
       markers.splice(index, 1);
       updateList();
     }
 
-    // Liste aktualisieren
+    
     function updateList() {
       statusDiv.innerHTML = `Marker: ${markers.length}`;
       listDiv.innerHTML = markers.map((m, i) => {
-        return `<div style="display:flex; justify-content:space-between; align-items:center; padding:2px; border-bottom:1px solid #333;">
+        return `<div style="display:flex; justify-content:space-between; align-items:center; padding:2px; border-bottom:1px solid rgba(255,255,255,0.08);">
           <span>${m.label}: (${Math.round(m.x)}, ${Math.round(m.y)})</span>
-          <button style="background:#a44; border:none; color:#fff; border-radius:4px; cursor:pointer; padding:2px 6px;" data-index="${i}">✕</button>
+          <button style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); color:var(--qt-text, #eaf1ff); border-radius:6px; cursor:pointer; padding:2px 6px;" data-index="${i}">x</button>
         </div>`;
       }).join('');
-      // Event-Listener für Lösch-Buttons
+      
       listDiv.querySelectorAll('button[data-index]').forEach(btn => {
         btn.addEventListener('click', (e) => {
           const index = parseInt(e.target.dataset.index);
@@ -157,24 +161,24 @@
       });
     }
 
-    // Key-Listener für Marker setzen
+    
     function onKeyDown(e) {
       if (e.code === markerKey) {
         addMarker();
       }
     }
 
-    // Aktivierung/Deaktivierung
+    
     let active = false;
     const toggleBtn = document.createElement('button');
     toggleBtn.textContent = 'Aktivieren';
     toggleBtn.style.width = '100%';
     toggleBtn.style.margin = '4px 0';
     toggleBtn.style.padding = '4px';
-    toggleBtn.style.background = '#4a6';
-    toggleBtn.style.color = '#fff';
-    toggleBtn.style.border = 'none';
-    toggleBtn.style.borderRadius = '4px';
+    toggleBtn.style.background = 'rgba(255,255,255,0.12)';
+    toggleBtn.style.color = 'var(--qt-text, #eaf1ff)';
+    toggleBtn.style.border = '1px solid var(--qt-border, rgba(255,255,255,0.12))';
+    toggleBtn.style.borderRadius = '8px';
     toggleBtn.style.cursor = 'pointer';
     container.appendChild(toggleBtn);
 
@@ -183,11 +187,13 @@
       if (active) {
         document.addEventListener('keydown', onKeyDown);
         toggleBtn.textContent = 'Deaktivieren';
-        toggleBtn.style.background = '#a44';
+        toggleBtn.style.background = 'var(--qt-accent, #b78bff)';
+        toggleBtn.style.color = '#111';
       } else {
         document.removeEventListener('keydown', onKeyDown);
         toggleBtn.textContent = 'Aktivieren';
-        toggleBtn.style.background = '#4a6';
+        toggleBtn.style.background = 'rgba(255,255,255,0.12)';
+        toggleBtn.style.color = 'var(--qt-text, #eaf1ff)';
       }
     };
 
@@ -196,43 +202,44 @@
       updateList();
     };
 
-    // ------------------------------------------------------------
-    // 4. Zeichen-Funktion
-    // ------------------------------------------------------------
+    
+    
+    
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const fontFamily = getComputedStyle(markerWin).fontFamily || 'Arial, sans-serif';
       markers.forEach(m => {
-        // Kreis zeichnen
+        
         ctx.beginPath();
         ctx.arc(m.x, m.y, 10, 0, 2 * Math.PI);
         ctx.strokeStyle = m.color;
         ctx.lineWidth = 3;
         ctx.stroke();
-        ctx.fillStyle = m.color + '33'; // 20% Opazität
+        ctx.fillStyle = m.color + '33'; 
         ctx.fill();
 
-        // Label
-        ctx.font = 'bold 14px Arial';
+        
+        ctx.font = `bold 14px ${fontFamily}`;
         ctx.fillStyle = '#fff';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(m.label, m.x, m.y - 15);
 
-        // Entfernung zur Maus (optional)
+        
         const dx = t.lastMouseX - m.x;
         const dy = t.lastMouseY - m.y;
         const dist = Math.sqrt(dx*dx + dy*dy);
-        ctx.font = '12px Arial';
-        ctx.fillStyle = '#ccc';
+        ctx.font = `12px ${fontFamily}`;
+        ctx.fillStyle = 'rgba(255,255,255,0.7)';
         ctx.fillText(Math.round(dist) + 'px', m.x + 15, m.y - 5);
       });
       requestAnimationFrame(draw);
     }
     draw();
 
-    // ------------------------------------------------------------
-    // 5. Aufräumen
-    // ------------------------------------------------------------
+    
+    
+    
     window.addEventListener('beforeunload', () => {
       document.removeEventListener('keydown', onKeyDown);
       canvas.remove();

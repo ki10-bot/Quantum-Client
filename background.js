@@ -55,7 +55,7 @@ function dispatchMouseEvent(tabId, type, x, y, button = 'left') {
   });
 }
 
-/* ---------- NEU: VK -> key/code map (gleich wie content) ---------- */
+
 const VK_MAP = {
   32: { key: ' ', code: 'Space' },
   13: { key: 'Enter', code: 'Enter' },
@@ -68,7 +68,7 @@ const VK_MAP = {
   38: { key: 'ArrowUp', code: 'ArrowUp' },
   39: { key: 'ArrowRight', code: 'ArrowRight' },
   40: { key: 'ArrowDown', code: 'ArrowDown' },
-  // add more if needed
+  
 };
 
 function vkToKeyAndCode(vk) {
@@ -89,7 +89,7 @@ function vkToKeyAndCode(vk) {
   }
 }
 
-/* ---------- NEU: sende rawKeyDown (ohne keyUp) ---------- */
+
 function sendRawKeyDown(tabId, vk) {
   return new Promise((resolve, reject) => {
     const target = { tabId };
@@ -117,7 +117,7 @@ function sendRawKeyDown(tabId, vk) {
   });
 }
 
-/* ---------- NEU: sende keyUp ---------- */
+
 function sendKeyUp(tabId, vk) {
   return new Promise((resolve, reject) => {
     const target = { tabId };
@@ -140,7 +140,7 @@ function sendKeyUp(tabId, vk) {
   });
 }
 
-/* ---------- Bestehende dispatchKeyEvent / dispatchRawKeySequence-Funktionen bleiben falls du sie brauchst ---------- */
+
 function dispatchKeyEvent(tabId, type, keyCode) {
   return new Promise((resolve, reject) => {
     const target = { tabId };
@@ -151,7 +151,7 @@ function dispatchKeyEvent(tabId, type, keyCode) {
       : key;
 
     const params = {
-      type, // 'keyDown' | 'keyUp'
+      type, 
       key: key,
       code: code,
       windowsVirtualKeyCode: keyCode,
@@ -174,7 +174,7 @@ function dispatchKeyEvent(tabId, type, keyCode) {
   });
 }
 
-/* ---------- Kontextmenü (bleibt) ---------- */
+
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: 'visual-search',
@@ -192,11 +192,11 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   }
 });
 
-/* ---------- Nachrichten vom Content-Skript ---------- */
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   const tabId = sender.tab?.id;
 
-  // bringToFront helper
+  
   function bringToFrontIfPossible(tabId) {
     return new Promise((resolve) => {
       try {
@@ -252,7 +252,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
 
-  /* ---------- NEU: keyDown (rawKeyDown, no keyUp) ---------- */
+  
   if (message.action === "keyDown") {
     attachDebugger(tabId)
       .then(() => bringToFrontIfPossible(tabId))
@@ -262,7 +262,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
 
-  /* ---------- NEU: keyUp ---------- */
+  
   if (message.action === "keyUp") {
     attachDebugger(tabId)
       .then(() => bringToFrontIfPossible(tabId))
@@ -272,16 +272,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
 
-  /* ---------- EXISTIERENDE: fallback "keypress" (rawDown+char+up) ---------- */
+  
   if (message.action === "keypress") {
     attachDebugger(tabId)
       .then(() => bringToFrontIfPossible(tabId))
       .then(() => {
-        // reuse sendRawKeyDown + char + keyUp sequence
+        
         const vk = message.keyCode;
         const { key, code } = vkToKeyAndCode(vk) || {};
         return new Promise((res, rej) => {
-          // rawDown
+          
           chrome.debugger.sendCommand({ tabId }, 'Input.dispatchKeyEvent', {
             type: 'rawKeyDown',
             windowsVirtualKeyCode: vk,
@@ -296,13 +296,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             modifiers: 0
           }, () => {
             if (chrome.runtime.lastError) return rej(chrome.runtime.lastError.message);
-            // char (optional)
+            
             if (key && key.length > 0 && key !== 'Shift' && key !== 'Control' && key !== 'Alt') {
               chrome.debugger.sendCommand({ tabId }, 'Input.dispatchKeyEvent', {
                 type: 'char',
                 text: key
               }, () => {
-                // keyUp
+                
                 chrome.debugger.sendCommand({ tabId }, 'Input.dispatchKeyEvent', {
                   type: 'keyUp',
                   windowsVirtualKeyCode: vk,
@@ -316,7 +316,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 });
               });
             } else {
-              // keyUp immediately
+              
               chrome.debugger.sendCommand({ tabId }, 'Input.dispatchKeyEvent', {
                 type: 'keyUp',
                 windowsVirtualKeyCode: vk,

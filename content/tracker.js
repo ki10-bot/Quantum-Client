@@ -3,9 +3,9 @@
   const t = window.taming;
 
   t.tracker = function(overlay) {
-    // ------------------------------------------------------------
-    // 1. Button und Fenster erstellen
-    // ------------------------------------------------------------
+    
+    
+    
     const trackerBtn = t.createIconButton('tracker', 56, 65, 35);
     const trackerWin = t.createWindow('3D-Tracker', '400px', '250px', '300px', '200px');
     trackerWin.style.display = 'none';
@@ -14,9 +14,9 @@
       trackerWin.style.display = trackerWin.style.display === 'none' ? 'block' : 'none';
     };
 
-    // ------------------------------------------------------------
-    // 2. UI-Elemente im Fenster
-    // ------------------------------------------------------------
+    
+    
+    
     const statusDiv = document.createElement('div');
     statusDiv.style.padding = '8px';
     statusDiv.style.fontSize = '14px';
@@ -27,10 +27,10 @@
     toggleBtn.textContent = 'Tracking starten';
     toggleBtn.style.margin = '4px';
     toggleBtn.style.padding = '4px 8px';
-    toggleBtn.style.background = '#4a6';
-    toggleBtn.style.color = '#fff';
-    toggleBtn.style.border = 'none';
-    toggleBtn.style.borderRadius = '4px';
+    toggleBtn.style.background = 'rgba(255,255,255,0.12)';
+    toggleBtn.style.color = 'var(--qt-text, #eaf1ff)';
+    toggleBtn.style.border = '1px solid var(--qt-border, rgba(255,255,255,0.12))';
+    toggleBtn.style.borderRadius = '8px';
     toggleBtn.style.cursor = 'pointer';
     trackerWin.appendChild(toggleBtn);
 
@@ -41,9 +41,9 @@
     objectList.style.marginTop = '8px';
     trackerWin.appendChild(objectList);
 
-    // ------------------------------------------------------------
-    // 3. Tracking-Variablen
-    // ------------------------------------------------------------
+    
+    
+    
     let trackingActive = false;
     let trackedObjects = [];
     let overlayCanvas = null;
@@ -52,9 +52,9 @@
     let originalUniforms = null;
     let originalDraw = null;
 
-    // ------------------------------------------------------------
-    // 4. Hilfsfunktionen
-    // ------------------------------------------------------------
+    
+    
+    
     function getTranslationFromMatrix(mat) {
       return [mat[12], mat[13], mat[14]];
     }
@@ -68,30 +68,30 @@
       return { x: screenX, y: screenY, z: clipZ / clipW };
     }
 
-    // ------------------------------------------------------------
-    // 5. Patch-Funktionen mit dynamischer Methodensicherung
-    // ------------------------------------------------------------
+    
+    
+    
     function patchShaders() {
-      // Prüfe, ob window.Shader jetzt existiert (kann später geladen werden)
+      
       if (!window.Shader) {
-        statusDiv.innerHTML = '❌ Fehler: window.Shader nicht gefunden. Die Grafik-Engine ist noch nicht bereit – bitte später erneut versuchen.';
+        statusDiv.innerHTML = 'Fehler: window.Shader nicht gefunden. Die Grafik-Engine ist noch nicht bereit – bitte später erneut versuchen.';
         return false;
       }
       if (!window.Shader.prototype) {
-        statusDiv.innerHTML = '❌ Fehler: Shader.prototype fehlt – unerwarteter Zustand.';
+        statusDiv.innerHTML = 'Fehler: Shader.prototype fehlt – unerwarteter Zustand.';
         return false;
       }
 
-      // Original-Methoden erst jetzt sichern
+      
       originalUniforms = window.Shader.prototype.uniforms;
       originalDraw = window.Shader.prototype.draw;
 
       if (typeof originalUniforms !== 'function' || typeof originalDraw !== 'function') {
-        statusDiv.innerHTML = '❌ Fehler: Shader-Methoden sind keine Funktionen – unerwarteter Zustand.';
+        statusDiv.innerHTML = 'Fehler: Shader-Methoden sind keine Funktionen – unerwarteter Zustand.';
         return false;
       }
 
-      // Überschreibe uniforms
+      
       window.Shader.prototype.uniforms = function(uniforms) {
         const mvp = uniforms.u_mvp || uniforms.u_model || uniforms.u_transform;
         if (mvp && mvp.length === 16) {
@@ -100,7 +100,7 @@
         return originalUniforms.call(this, uniforms);
       };
 
-      // Überschreibe draw
+      
       window.Shader.prototype.draw = function(mesh, mode, indexBufferName) {
         if (this._lastMatrix) {
           const matrix = this._lastMatrix;
@@ -118,7 +118,7 @@
         return originalDraw.call(this, mesh, mode, indexBufferName);
       };
 
-      statusDiv.innerHTML = '✅ Patch erfolgreich – Tracking aktiv';
+      statusDiv.innerHTML = 'Patch erfolgreich – Tracking aktiv';
       return true;
     }
 
@@ -131,9 +131,9 @@
       }
     }
 
-    // ------------------------------------------------------------
-    // 6. Overlay-Canvas
-    // ------------------------------------------------------------
+    
+    
+    
     function createOverlay() {
       if (overlayCanvas) return;
       overlayCanvas = document.createElement('canvas');
@@ -163,12 +163,12 @@
       }
     }
 
-    // ------------------------------------------------------------
-    // 7. Start/Stopp-Logik
-    // ------------------------------------------------------------
+    
+    
+    
     toggleBtn.onclick = () => {
       if (!trackingActive) {
-        // Tracking starten
+        
         createOverlay();
 
         if (!patched) {
@@ -177,21 +177,23 @@
             patched = true;
             trackingActive = true;
             toggleBtn.textContent = 'Tracking stoppen';
-            toggleBtn.style.background = '#a44';
+            toggleBtn.style.background = 'var(--qt-accent, #b78bff)';
+            toggleBtn.style.color = '#111';
           } else {
-            // Patch fehlgeschlagen – Overlay wieder entfernen
+            
             trackingActive = false;
             removeOverlay();
           }
         } else {
-          // Bereits gepatcht (sollte nicht vorkommen)
+          
           trackingActive = true;
           toggleBtn.textContent = 'Tracking stoppen';
-          toggleBtn.style.background = '#a44';
+          toggleBtn.style.background = 'var(--qt-accent, #b78bff)';
+          toggleBtn.style.color = '#111';
           statusDiv.innerHTML = 'Tracking aktiv';
         }
       } else {
-        // Tracking stoppen
+        
         trackingActive = false;
         if (patched) {
           unpatchShaders();
@@ -200,15 +202,16 @@
         removeOverlay();
         trackedObjects = [];
         toggleBtn.textContent = 'Tracking starten';
-        toggleBtn.style.background = '#4a6';
+        toggleBtn.style.background = 'rgba(255,255,255,0.12)';
+        toggleBtn.style.color = 'var(--qt-text, #eaf1ff)';
         statusDiv.innerHTML = 'Tracking inaktiv';
         objectList.innerHTML = '';
       }
     };
 
-    // ------------------------------------------------------------
-    // 8. Periodische Aktualisierung
-    // ------------------------------------------------------------
+    
+    
+    
     setInterval(() => {
       if (!trackingActive || !overlayCtx) return;
 
@@ -245,9 +248,9 @@
       }
     }, 100);
 
-    // ------------------------------------------------------------
-    // 9. Aufräumen
-    // ------------------------------------------------------------
+    
+    
+    
     window.addEventListener('beforeunload', () => {
       if (patched) {
         unpatchShaders();

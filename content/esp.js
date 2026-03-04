@@ -44,7 +44,7 @@
     const players = [];
 
     const config = {
-      targetImageUrl: '7145551935340eadd5dc6317', // Deine Bild-ID
+      targetImageUrl: '7145551935340eadd5dc6317', 
       minSize: 10,
       maxSize: 50,
       detectText: false,

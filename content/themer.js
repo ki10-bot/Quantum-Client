@@ -2,7 +2,6 @@
 (function() {
   const t = window.taming;
 
-  // Einmaliger Patch für HTMLImageElement.prototype.src
   if (!window.__themerPatched) {
     window.__themerPatched = true;
     const originalSrcDescriptor = Object.getOwnPropertyDescriptor(HTMLImageElement.prototype, 'src');
@@ -17,9 +16,9 @@
         for (const r of reps) {
           if (value.includes(r.original)) {
             let replacementUrl = r.replacement;
-            // Pfade in vollständige Extension-URL umwandeln
+          
             if (!replacementUrl.startsWith('http') && !replacementUrl.startsWith('chrome-extension://')) {
-              // Wenn es ein relativer Pfad ist, nimm an, dass er im assets-Ordner liegt
+            
               if (replacementUrl.startsWith('assets/')) {
                 replacementUrl = chrome.runtime.getURL(replacementUrl);
               } else {
@@ -37,19 +36,19 @@
   }
 
   t.themer = function(overlay) {
-    // Button erstellen (Icon 'theme' muss im icons-Ordner liegen)
+    
     const themeBtn = t.createIconButton('theme', 56, 65, 35);
     
-    // Fenster mit angemessener Größe
+    
     const themeWin = t.createWindow('Texture Ersetzer', '300px', '200px', '350px', '350px');
     themeWin.style.display = 'none';
-    themeWin.style.overflow = 'hidden'; // Verhindert, dass Inhalt übersteht
+    themeWin.style.overflow = 'hidden'; 
 
     themeBtn.onclick = () => {
       themeWin.style.display = themeWin.style.display === 'none' ? 'block' : 'none';
     };
 
-    // Liste der Ersetzungen (wird im localStorage gespeichert)
+    
     let replacements = [];
 
     function loadReplacements() {
@@ -65,7 +64,7 @@
     }
     loadReplacements();
 
-    // UI-Elemente
+    
     const listDiv = document.createElement('div');
     listDiv.style.maxHeight = '180px';
     listDiv.style.overflowY = 'auto';
@@ -80,7 +79,8 @@
       if (replacements.length === 0) {
         const empty = document.createElement('div');
         empty.textContent = 'Keine Ersetzungen';
-        empty.style.color = '#aaa';
+        empty.style.color = 'var(--qt-text, #eaf1ff)';
+        empty.style.opacity = '0.7';
         empty.style.padding = '8px';
         empty.style.textAlign = 'center';
         listDiv.appendChild(empty);
@@ -112,7 +112,7 @@
         repSpan.title = r.replacement;
 
         const delBtn = document.createElement('button');
-        delBtn.textContent = '🗑️';
+        delBtn.textContent = 'Del';
         delBtn.style.background = 'none';
         delBtn.style.border = 'none';
         delBtn.style.cursor = 'pointer';
@@ -130,7 +130,7 @@
       });
     }
 
-    // Eingabebereich
+    
     const inputDiv = document.createElement('div');
     inputDiv.style.display = 'flex';
     inputDiv.style.flexDirection = 'column';
@@ -140,28 +140,30 @@
     const origLabel = document.createElement('div');
     origLabel.textContent = 'Original-Teilstring:';
     origLabel.style.fontSize = '11px';
-    origLabel.style.color = '#ccc';
+    origLabel.style.color = 'var(--qt-text, #eaf1ff)';
+    origLabel.style.opacity = '0.7';
 
     const origInput = document.createElement('input');
     origInput.placeholder = 'z.B. /images/old.png';
-    origInput.style.background = '#333';
-    origInput.style.color = '#fff';
-    origInput.style.border = '1px solid #555';
+    origInput.style.background = 'rgba(22, 24, 32, 0.9)';
+    origInput.style.color = 'var(--qt-text, #eaf1ff)';
+    origInput.style.border = '1px solid var(--qt-border, rgba(255,255,255,0.12))';
     origInput.style.padding = '4px';
-    origInput.style.borderRadius = '4px';
+    origInput.style.borderRadius = '8px';
 
     const repLabel = document.createElement('div');
     repLabel.textContent = 'Ersatz (assets/neu.png oder URL):';
     repLabel.style.fontSize = '11px';
-    repLabel.style.color = '#ccc';
+    repLabel.style.color = 'var(--qt-text, #eaf1ff)';
+    repLabel.style.opacity = '0.7';
 
     const repInput = document.createElement('input');
     repInput.placeholder = 'z.B. assets/meine_textur.png';
-    repInput.style.background = '#333';
-    repInput.style.color = '#fff';
-    repInput.style.border = '1px solid #555';
+    repInput.style.background = 'rgba(22, 24, 32, 0.9)';
+    repInput.style.color = 'var(--qt-text, #eaf1ff)';
+    repInput.style.border = '1px solid var(--qt-border, rgba(255,255,255,0.12))';
     repInput.style.padding = '4px';
-    repInput.style.borderRadius = '4px';
+    repInput.style.borderRadius = '8px';
 
     const buttonRow = document.createElement('div');
     buttonRow.style.display = 'flex';
@@ -170,22 +172,22 @@
 
     const addBtn = document.createElement('button');
     addBtn.textContent = 'Hinzufügen';
-    addBtn.style.background = '#4a6';
-    addBtn.style.border = 'none';
-    addBtn.style.color = '#fff';
+    addBtn.style.background = 'var(--qt-accent, #b78bff)';
+    addBtn.style.border = '1px solid var(--qt-border, rgba(255,255,255,0.12))';
+    addBtn.style.color = '#111';
     addBtn.style.cursor = 'pointer';
     addBtn.style.padding = '6px';
-    addBtn.style.borderRadius = '4px';
+    addBtn.style.borderRadius = '8px';
     addBtn.style.flex = '1';
 
     const clearBtn = document.createElement('button');
     clearBtn.textContent = 'Alle löschen';
-    clearBtn.style.background = '#a44';
-    clearBtn.style.border = 'none';
-    clearBtn.style.color = '#fff';
+    clearBtn.style.background = 'rgba(255,255,255,0.08)';
+    clearBtn.style.border = '1px solid var(--qt-border, rgba(255,255,255,0.12))';
+    clearBtn.style.color = 'var(--qt-text, #eaf1ff)';
     clearBtn.style.cursor = 'pointer';
     clearBtn.style.padding = '6px';
-    clearBtn.style.borderRadius = '4px';
+    clearBtn.style.borderRadius = '8px';
 
     buttonRow.appendChild(addBtn);
     buttonRow.appendChild(clearBtn);
@@ -198,12 +200,12 @@
 
     themeWin.appendChild(inputDiv);
 
-    // Hinzufügen
+    
     addBtn.onclick = () => {
       const orig = origInput.value.trim();
       const rep = repInput.value.trim();
       if (orig && rep) {
-        // Prüfen, ob bereits vorhanden (einfache Duplikatsvermeidung)
+        
         const exists = replacements.some(r => r.original === orig && r.replacement === rep);
         if (!exists) {
           replacements.push({ original: orig, replacement: rep });
@@ -219,7 +221,7 @@
       }
     };
 
-    // Alle löschen
+    
     clearBtn.onclick = () => {
       if (confirm('Alle Ersetzungen löschen?')) {
         replacements = [];

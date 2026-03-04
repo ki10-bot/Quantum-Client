@@ -3,19 +3,22 @@
   const t = window.taming;
 
   t.aimHelper = function(overlay) {
-    // ------------------------------------------------------------
-    // 1. Button mit Fallback
-    // ------------------------------------------------------------
+    
+    
+    
     let aimBtn;
     try {
       aimBtn = t.createIconButton('aim', 56, 65, 35);
     } catch (e) {
-      aimBtn = t.createButton('🎯');
+      aimBtn = t.createButton('Aim');
       aimBtn.style.width = '56px';
       aimBtn.style.height = '65px';
-      aimBtn.style.fontSize = '24px';
-      aimBtn.style.lineHeight = '65px';
+      aimBtn.style.fontSize = '11px';
+      aimBtn.style.lineHeight = '16px';
       aimBtn.style.padding = '0';
+      aimBtn.style.display = 'flex';
+      aimBtn.style.alignItems = 'center';
+      aimBtn.style.justifyContent = 'center';
     }
 
     const aimWin = t.createWindow('Zielhilfe Pro', '400px', '250px', '380px', '600px');
@@ -25,14 +28,14 @@
       aimWin.style.display = aimWin.style.display === 'none' ? 'block' : 'none';
     };
 
-    // ------------------------------------------------------------
-    // 2. UI-Elemente für Einstellungen
-    // ------------------------------------------------------------
+    
+    
+    
     const container = document.createElement('div');
     container.style.padding = '4px';
     aimWin.appendChild(container);
 
-    // Aktivierungsschalter
+    
     const toggleDiv = document.createElement('div');
     toggleDiv.style.margin = '4px';
     const toggleCheck = document.createElement('input');
@@ -46,10 +49,10 @@
     toggleDiv.appendChild(toggleLabel);
     container.appendChild(toggleDiv);
 
-    // ---- Sichtbarkeitsoptionen ----
+    
     const visDiv = document.createElement('div');
     visDiv.style.margin = '8px 4px';
-    visDiv.style.borderTop = '1px solid #444';
+    visDiv.style.borderTop = '1px solid var(--qt-border, rgba(255,255,255,0.12))';
     visDiv.style.paddingTop = '4px';
     container.appendChild(visDiv);
 
@@ -80,10 +83,10 @@
       return div;
     }
 
-    // ---- Leuchteffekt (Glow) ----
+    
     const glowDiv = document.createElement('div');
     glowDiv.style.margin = '8px 4px';
-    glowDiv.style.borderTop = '1px solid #444';
+    glowDiv.style.borderTop = '1px solid var(--qt-border, rgba(255,255,255,0.12))';
     glowDiv.style.paddingTop = '4px';
     container.appendChild(glowDiv);
 
@@ -102,7 +105,7 @@
     glowStrengthDiv.appendChild(glowSlider);
     glowDiv.appendChild(glowStrengthDiv);
 
-    // ---- Radius-Slider ----
+    
     const radiusDiv = document.createElement('div');
     radiusDiv.style.margin = '8px 4px';
     radiusDiv.innerHTML = '<div style="font-size:12px;">Kreis-Radius: <span id="aim-radius-value">170</span>px</div>';
@@ -115,7 +118,7 @@
     radiusDiv.appendChild(radiusSlider);
     container.appendChild(radiusDiv);
 
-    // ---- Abstand des Winkels vom Kreis ----
+    
     const offsetDiv = document.createElement('div');
     offsetDiv.style.margin = '8px 4px';
     offsetDiv.innerHTML = '<div style="font-size:12px;">Abstand Winkel vom Kreis: <span id="aim-offset-value">20</span>px</div>';
@@ -128,10 +131,10 @@
     offsetDiv.appendChild(offsetSlider);
     container.appendChild(offsetDiv);
 
-    // ---- Farboptionen ----
+    
     const colorDiv = document.createElement('div');
     colorDiv.style.margin = '8px 4px';
-    colorDiv.style.borderTop = '1px solid #444';
+    colorDiv.style.borderTop = '1px solid var(--qt-border, rgba(255,255,255,0.12))';
     colorDiv.style.paddingTop = '4px';
     container.appendChild(colorDiv);
 
@@ -161,9 +164,9 @@
       return div;
     }
 
-    // ------------------------------------------------------------
-    // 3. Canvas für die Zeichnung
-    // ------------------------------------------------------------
+    
+    
+    
     const canvas = document.createElement('canvas');
     canvas.style.position = 'fixed';
     canvas.style.top = '0';
@@ -182,9 +185,9 @@
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    // ------------------------------------------------------------
-    // 4. Zustand und Listener
-    // ------------------------------------------------------------
+    
+    
+    
     let active = false;
     let mouseX = window.innerWidth / 2;
     let mouseY = window.innerHeight / 2;
@@ -212,9 +215,9 @@
       document.removeEventListener('mouseup', onMouseUp);
     }
 
-    // ------------------------------------------------------------
-    // 5. Zeichen-Funktion mit Glow
-    // ------------------------------------------------------------
+    
+    
+    
     function draw() {
       if (!active) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -229,7 +232,7 @@
       const radius = parseInt(radiusSlider.value);
       const offset = parseInt(offsetSlider.value);
 
-      // Optionen
+      
       const showLine = document.getElementById('aim-line')?.checked ?? true;
       const showCircle = document.getElementById('aim-circle')?.checked ?? true;
       const showAngle = document.getElementById('aim-angle')?.checked ?? true;
@@ -238,18 +241,18 @@
       const glowEnabled = document.getElementById('aim-glow')?.checked ?? false;
       const glowStrength = parseInt(glowSlider.value);
 
-      // Farben
+      
       const lineColor = document.getElementById('aim-line-color')?.value || '#03fc88';
       const circleColor = document.getElementById('aim-circle-color')?.value || '#03fc88';
       const textColor = document.getElementById('aim-text-color')?.value || '#40bd5b';
       const clickTrueColor = document.getElementById('aim-click-true')?.value || '#11f041';
       const clickFalseColor = document.getElementById('aim-click-false')?.value || '#f01149';
 
-      // Glow-Pass (weiche, dicke Linien)
+      
       if (glowEnabled && (showLine || showCircle)) {
         ctx.save();
         ctx.globalAlpha = 0.25;
-        ctx.lineWidth = 2 + glowStrength; // Basis 2 + zusätzliche Stärke
+        ctx.lineWidth = 2 + glowStrength; 
 
         if (showLine) {
           ctx.beginPath();
@@ -269,7 +272,7 @@
         ctx.restore();
       }
 
-      // Normal-Pass (scharfe Linien)
+      
       ctx.save();
       ctx.lineWidth = 2;
 
@@ -288,26 +291,27 @@
         ctx.stroke();
       }
 
-      // Winkel berechnen
+      
       const dx = mouseX - centerX;
       const dy = mouseY - centerY;
       let angleRad = Math.atan2(dy, dx);
       let angleDeg = angleRad * (180 / Math.PI);
       if (angleDeg < 0) angleDeg += 360;
       const angleText = `${angleDeg.toFixed(1)}°`;
+      const fontFamily = getComputedStyle(aimWin).fontFamily || 'Arial, sans-serif';
 
-      // Winkel anzeigen
+      
       if (showAngle) {
-        ctx.font = "16px Arial";
+        ctx.font = `16px ${fontFamily}`;
         ctx.fillStyle = textColor;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText(angleText, centerX, centerY - radius - offset);
       }
 
-      // Mauskoordinaten
+      
       if (showCoords) {
-        ctx.font = "14px Arial";
+        ctx.font = `14px ${fontFamily}`;
         ctx.textAlign = "left";
         ctx.textBaseline = "bottom";
         ctx.fillStyle = textColor;
@@ -315,9 +319,9 @@
         ctx.fillText(coordText, mouseX + 5, mouseY - 5);
       }
 
-      // Klick-Status
+      
       if (showClick) {
-        ctx.font = "14px Arial";
+        ctx.font = `14px ${fontFamily}`;
         ctx.textAlign = "left";
         ctx.textBaseline = "bottom";
         ctx.fillStyle = textColor;
@@ -331,9 +335,9 @@
     }
     draw();
 
-    // ------------------------------------------------------------
-    // 6. Aktivierung per Checkbox steuern
-    // ------------------------------------------------------------
+    
+    
+    
     toggleCheck.addEventListener('change', (e) => {
       active = e.target.checked;
       if (active) {
@@ -346,7 +350,7 @@
       }
     });
 
-    // Live-Anzeige der Slider-Werte
+    
     function setupLiveSpan(slider, spanId) {
       const span = document.getElementById(spanId);
       if (span) {
@@ -357,16 +361,16 @@
       }
     }
 
-    // Nachdem das DOM fertig ist, die Spans verbinden
+    
     setTimeout(() => {
       setupLiveSpan(radiusSlider, 'aim-radius-value');
       setupLiveSpan(offsetSlider, 'aim-offset-value');
       setupLiveSpan(glowSlider, 'aim-glow-value');
     }, 0);
 
-    // ------------------------------------------------------------
-    // 7. Aufräumen beim Entladen
-    // ------------------------------------------------------------
+    
+    
+    
     window.addEventListener('beforeunload', () => {
       removeListeners();
       canvas.remove();
