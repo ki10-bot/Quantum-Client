@@ -1,201 +1,78 @@
-# Quantum Client – Das ultimative Multitool für taming.io
+# Quantum Client – The ultimate multitool for taming.io
 
-Quantum Client ist eine leistungsstarke Browser-Erweiterung für **taming.io**, die eine Vielzahl von Modulen und Werkzeugen bietet, um dein Spielerlebnis zu verbessern. Von praktischen Helfern wie Autoclicker und Makro-Recorder bis hin zu optischen Anpassungen und KI-gestützter Spielererkennung – Quantum Client vereint alles in einer benutzerfreundlichen Oberfläche.
+---
 
-## 📦 Features
+## Deutsch
 
-Das Tool besteht aus vielen einzelnen **Modulen**, die du über das Hauptmenü ein- und ausschalten kannst. Jedes Modul hat seinen eigenen Button und kann bei Bedarf konfiguriert werden.
+**Kurzbeschreibung**
+Quantum Client ist eine leistungsstarke Browser-Erweiterung für das Spiel (im Folgenden „der Client“), die zahlreiche Module und Werkzeuge bereitstellt, um das Spielerlebnis zu erweitern und anzupassen. Die Erweiterung bietet Automatisierung, Analyse-, UI- und Audio-Funktionen sowie experimentelle KI-Features in einer konsistenten, konfigurierbaren Oberfläche.
 
-| Modul | Beschreibung |
-|-------|--------------|
-| **Graph** | Zeigt FPS, Ping und Frametime in Echtzeit als Liniendiagramm an. |
-| **Scale** | Vergrößert das Spielcanvas um den Faktor 2 (nützlich für bessere Sicht). |
-| **Automation** | Ermöglicht das Ausführen von Aktionen (Mausklick, Tastendruck) nach einem bestimmten Trigger und Delay. |
-| **ESP** | Markiert Spieler auf dem Bildschirm durch Analyse der `drawImage`-Aufrufe. |
-| **Themer** | Ersetzt bestimmte Bild-URLs durch eigene Bilder (wie ein Texture Pack). |
-| **3D Tracker** | Extrahiert 3D-Positionen von Objekten aus der Spiel-Engine (LiteGL). |
-| **Network Inspector** | Zeigt WebSocket-Nachrichten (MessagePack) in einem Fenster an – ideal zum Verstehen der Spielkommunikation. |
-| **Range Indicator** | Zeichnet einen Kreis oder ein Fadenkreuz um die Maus – hilfreich für Bogenreichweite. |
-| **Autoclicker** | Klickt automatisch mit einstellbarer Geschwindigkeit, wahlweise nur bei gedrückter Taste. |
-| **Mouse Stats** | Zeigt CPS (Klicks pro Sekunde), Mausgeschwindigkeit und Durchschnittswerte als Grafik. |
-| **Key Counter** | Tortendiagramm der am häufigsten gedrückten Tasten. |
-| **AI Tracker** | (Experimentell) Erkennt Spieler mit einem YOLOv11-ONNX-Modell direkt im Browser. |
-| **Edit-Moment** | Friert den Bildschirm ein, färbt alles schwarz-weiß und vibriert zum Beat eines Sounds. |
-| **Makro Recorder Pro** | Zeichnet Mausbewegungen, Klicks und Tastendrücke auf und spielt sie mit einstellbarer Geschwindigkeit ab – inklusive Visualisierung während der Aufnahme. |
-| **Quantum Menu** | Ein spektakuläres Menü, das mit der rechten Umschalttaste geöffnet wird – Buttons kreisen um ein leuchtendes Logo, lassen sich ziehen und kollidieren physikalisch miteinander. |
-| **Adblock Hider** | Versteckt lästige Adblock-Elemente (`#ccc-bottom`, `#ccc-left`) dauerhaft. |
-| **Theme Changer** | Ändert das Aussehen des Spiels: ersetzt Farben, Schriftarten und das Startbild. |
-| **Splash Screen** | Zeigt beim Laden der Seite ein schwarzes Overlay mit Logo und Sound – konfigurierbar. |
-| **Sounds** | Globale Soundeffekte für Klicks, Hover, Slider und Checkboxen. |
+### Features (Kurz)
 
-## 🚀 Installation
+* Modular aufgebaut: einzelne Module können ein-/ausgeschaltet und konfiguriert werden.
+* Performance- und Netzwerktools (FPS/Ping-Graph, Network Inspector).
+* Automatisierung (Autoclicker, Makro-Recorder, Automations-Regeln).
+* Sicht- und Interface-Anpassungen (Themer, Theme Changer, Scale, Splash Screen).
+* Spieler-Analyse (ESP, 3D-Tracker, experimenteller AI Tracker).
+* Bedienkomfort (Quantum Menu, Keybinds, Sounds, Adblock Hider).
 
-1. Lade den gesamten Quellcode als ZIP herunter oder klone das Repository.
-2. Öffne Chrome (oder einen anderen Chromium-Browser) und gehe zu `chrome://extensions`.
-3. Aktiviere den **Entwicklermodus** (oben rechts).
-4. Klicke auf **"Entpackte Erweiterung laden"** und wähle den Ordner aus, in dem sich die `manifest.json` befindet.
-5. Die Erweiterung wird installiert und ist sofort aktiv.
+### Installation
 
-**Hinweis:** Für einige Funktionen (Autoclicker, Automation, Makro-Recorder) wird die **Debugger-API** verwendet. Diese erfordert, dass die Erweiterung entsprechende Berechtigungen hat (bereits in der `manifest.json` enthalten).
+1. Repository klonen oder als ZIP herunterladen.
+2. Chrome/Chromium öffnen und `chrome://extensions` aufrufen.
+3. Entwicklermodus aktivieren.
+4. **Entpackte Erweiterung laden** und den Ordner mit `manifest.json` auswählen.
+5. Erweiterung ist danach aktiv.
 
-## 🖱️ Verwendung
+> Hinweis: Für bestimmte Funktionen (Autoclicker, Makro-Recorder, Automation) wird die Debugger-API genutzt; die nötigen Berechtigungen sind in der `manifest.json` voreingestellt.
 
-Nach der Installation erscheint auf `taming.io` ein schwebendes **Hauptmenü** (Kontrollzentrum). Dieses kannst du mit der Maus verschieben. Es enthält alle Modul-Buttons, die du durch Klick öffnen kannst. Bei mehr als 3 Modulen erscheinen Pfeile zum Blättern.
+### Verwendung
 
-- **Rechtsklick** auf einen Button öffnet das Keybind-Menü – dort kannst du eine Taste oder Maustaste festlegen, die den Button auslöst.
-- **Pfeil nach unten** unter dem Hauptmenü öffnet das **Einstellungspanel**, wo du das Aussehen des Hauptmenüs (Farbe, Transparenz, Rundung, Schatten) anpassen kannst.
-- **Rechte Umschalttaste** öffnet das **Quantum Menu** – ein schwebendes Kreis-Menü mit zusätzlichen Funktionen (Credits, Theme-Editor, News, Quick Settings, Entwickler-Tools, UI-Skalierung, Makro-Recorder). Dort lassen sich Buttons ziehen und sie interagieren physikalisch miteinander.
+* Nach Installation erscheint ein verschiebbares Hauptmenü (Kontrollzentrum) im Spiel.
+* Modul-Buttons öffnen die jeweiligen Fenster; mehr als drei Module können über Pfeile geblättert werden.
+* Rechtsklick auf einen Button öffnet das Keybind-Fenster zur Zuweisung einer Taste oder Maustaste.
+* Die rechte Umschalttaste öffnet das Quantum Menu — ein kreisförmiges Schnellmenü mit zusätzlichen Tools.
 
-## 🧩 Module im Detail
+### Wichtige Module (Kurzbeschreibung)
 
-### Graph (FPS & Ping)
-Zeigt zwei Liniendiagramme für FPS und Ping. Im Fenster siehst du aktuelle Werte, Durchschnittswerte und einen Reset-Button. Die Ping-Messung erfolgt per `HEAD`-Request auf `taming.io`, um 404-Fehler zu vermeiden.
+* **Graph**: Echtzeit-Liniendiagramme für FPS und Ping.
+* **Scale**: Vergrößert das Canvas (2×).
+* **Automation**: Regeln mit Triggern und Aktionen plus Delay.
+* **ESP**: Markiert Spieler durch Analyse von `drawImage`-Aufrufen.
+* **AI Tracker (experimentell)**: Lokale Objekterkennung via ONNX (WebGPU/WASM Fallback).
+* **Makro Recorder Pro**: Aufnahme und Abspielen von Maus/Tastatur mit Visualisierung.
+* **Quantum Menu**: Kreis-Menü mit physikalischer Interaktion der Buttons.
+* **Adblock Hider**: Entfernt häufige Adblock-Restelemente automatisch.
+* **Theme Changer / Themer**: Ersetzt Bilder, Farben und Fonts live.
 
-### Scale
-Vergrößert das Canvas des Spiels um das Doppelte. Ein erneuter Klick stellt die Originalgröße wieder her.
+### Anpassung (Einstellungspanel)
 
-### Automation
-Erstelle Automations-Regeln: Wähle einen **Trigger** (Tastatur- oder Maustaste) und eine **Aktion** (Mausklick oder Tastendruck). Der Delay (Verzögerung) wird über einen Schieberegler eingestellt. Mehrere Regeln sind möglich.
+Über das Einstellungspanel lassen sich Farben, Transparenz, Schrift, Rundung (border-radius), Schattenstärke und Schriftart aus dem `fonts`-Ordner anpassen. Änderungen werden sofort auf alle Fenster angewandt.
 
-### ESP
-Analysiert `drawImage`-Aufrufe, um Spieler auf dem Bildschirm zu markieren. Du kannst die Bild-ID anpassen (standardmäßig die von taming.io). Die Markierungen erscheinen als rote Punkte.
-
-### Themer
-Ersetzt bestimmte Bild-URLs durch eigene Bilder. Gib einen Teil der Original-URL ein und den Pfad zu deinem Ersatzbild (relativ zum Extension-Ordner, z.B. `assets/neu.png`). Die Ersetzung funktioniert live für neu geladene Bilder.
-
-### 3D Tracker
-Extrahiert 3D-Positionen von Objekten aus der Spiel-Engine (LiteGL). Die Positionen werden auf einem Overlay-Canvas als grüne Punkte dargestellt. Das Modul muss erst über den Button im Fenster gestartet werden.
-
-### Network Inspector
-Zeigt alle WebSocket-Nachrichten (MessagePack) an – sowohl gesendete (→) als auch empfangene (←). Die Nachrichten werden automatisch decodiert. Ideal zum Reverse Engineering der Spiel-API.
-
-### Range Indicator
-Zeichnet verschiedene Zielhilfen um die Maus: Kreis, Fadenkreuz, Punkt, Zielscheibe etc. Größe und Farbe sind einstellbar. Per Klick aktivierbar.
-
-### Autoclicker
-Klickt automatisch mit einstellbarer Frequenz (1–50 CPS). Du kannst die Maustaste wählen, einen Hold-Modus (nur bei gedrückter Taste) aktivieren und eine zufällige Verzögerung einstellen. Ein Zähler protokolliert die ausgeführten Klicks.
-
-### Mouse Stats
-Zeigt Echtzeit-Graphen für CPS (Klicks pro Sekunde) und Mausgeschwindigkeit (Pixel/s). Darunter werden der aktuelle und der durchschnittliche CPS angezeigt.
-
-### Key Counter
-Ein Tortendiagramm der am häufigsten gedrückten Tasten. Die Top-5 werden als farbige Segmente dargestellt, die restlichen Tasten als "Andere". Jedes Segment zeigt die Prozentzahl an.
-
-### AI Tracker (experimentell)
-Verwendet ein YOLOv11-Modell (ONNX), um Spieler auf dem Canvas zu erkennen. Die Erkennung läuft lokal im Browser über ONNX Runtime Web. Benötigt WebGPU oder WASM-Fallback. Das Modell muss im Ordner `models` liegen.
-
-### Edit-Moment
-Startet mit einem Klick einen Sound, friert den Bildschirm ein (Graustufen, keine Interaktion) und lässt das gesamte Fenster im Takt vibrieren. Ideal für dramatische Momente.
-
-### Makro Recorder Pro
-Zeichnet Mausbewegungen, Klicks und Tastendrücke auf. Während der Aufnahme wird ein Trail der Mausbewegungen und Marker für Klicks/Tasten eingeblendet. Die Wiedergabe kann mit einstellbarer Geschwindigkeit abgespielt werden (echte Klicks und Tasten via Debugger). Die Steuerung erfolgt über F1 (Aufnahme starten), F2 (stoppen), F3 (abspielen).
-
-### Quantum Menu
-Ein beeindruckendes Kreis-Menü, das mit **rechter Umschalttaste** geöffnet wird. Die Buttons kreisen langsam um das Logo, lassen sich ziehen und kollidieren physikalisch miteinander. Jeder Button öffnet ein Untermenü:
-- **Credits**: Informationen über den Client.
-- **Theme Editor**: Listet alle auf der Seite gefundenen Farben auf (mit Beispiel-Selektoren). Du kannst einzelne Farben ersetzen.
-- **Taming.io News**: Platzhalter für Discord-News (kann später ergänzt werden).
-- **Quick Settings**: Schnellzugriff auf Autoclicker, ESP, Network, Zielhilfe.
-- **Entwickler-Tools**: Zeigt Seiten-Informationen (URL, User-Agent, Canvas-Anzahl, WebGL).
-- **UI-Skalierung**: Skaliert das Quantum-Menü selbst (experimentell).
-- **Makro Recorder Pro**: Öffnet das Makro-Modul.
-
-### Adblock Hider
-Versteckt die Elemente `#ccc-bottom` und `#ccc-left`, die oft von Adblockern hinterlassen werden. Das Modul ist standardmäßig aktiv und überwacht das DOM auf neu hinzugefügte Elemente.
-
-### Theme Changer
-Ändert das visuelle Erscheinungsbild des Spiels:
-- Ersetzt das Startbild `play-picture.png?5` durch `utils/ui/animation.gif`.
-- Ändert die Hintergrundfarben von `#pets` und `#eqLFz` zu `#0f0e15`.
-- Ersetzt die Standardschriftarten durch `font2.ttf`.
-
-Standardmäßig aktiv, kann über das Fenster deaktiviert werden.
-
-### Splash Screen
-Zeigt beim Laden der Seite ein schwarzes Overlay mit Logo, eigenem Text und Sound. Die Einblendung erfolgt sanft mit 4 Sekunden Dauer. Die Schriftart kann aus dem `fonts`-Ordner geladen werden.
-
-### Sounds
-Globale Soundeffekte für alle UI-Elemente:
-- `click.mp3` – beim Klicken von Buttons, Icon-Buttons und Selects
-- `hover.mp3` – beim Überfahren von interaktiven Elementen (mit 50ms Verzögerung)
-- `slide.mp3` – beim Verschieben von Slidern (`input`-Event)
-- `checkbox.mp3` – beim Umschalten von Checkboxen
-
-Die Sounds müssen im Ordner `utils` liegen. Sie werden automatisch von `core.js` geladen und abgespielt.
-
-## ⌨️ Tastenkürzel / Keybinds
-
-Du kannst für jeden Button im Hauptmenü einen **Keybind** festlegen:
-- Rechtsklick auf den Button öffnet das Keybind-Fenster.
-- Drücke eine beliebige Taste (z.B. `F`, `ShiftLeft`) oder klicke eine Maustaste (Links, Mitte, Rechts).
-- Der Button wird dann bei jedem Drücken dieser Taste ausgelöst.
-
-## 🎨 Anpassung (Einstellungspanel)
-
-Über den **Pfeil nach unten** am Hauptmenü erreichst du das Einstellungspanel. Dort kannst du:
-- Hauptmenü ein-/ausblenden
-- Hintergrundfarbe wählen
-- Transparenz einstellen
-- Schriftfarbe ändern
-- Rahmenfarbe ändern
-- Rundung (border-radius) anpassen
-- Schattenintensität einstellen
-- Schriftart aus dem `fonts`-Ordner auswählen (`font.ttf`, `font2.ttf`)
-
-Alle Änderungen werden sofort auf alle Fenster (Hauptmenü, Modul-Fenster) angewendet.
-
-## 📁 Projektstruktur
+### Projektstruktur (Beispiel)
 
 ```
 quantum-client/
 ├── manifest.json
 ├── background.js
-├── icons/                      # Icons für die Buttons (56x65, 35x35 Icons)
-│   ├── textur.png
-│   ├── textur-hover.png
-│   ├── textur-active.png
-│   └── *.png (scale, graph, auto, esp, ...)
-├── utils/                       # Medien und Hilfsdateien
+├── icons/
+├── utils/
 │   ├── startup.mp3
-│   ├── edit.mp3
-│   ├── click.mp3, hover.mp3, slide.mp3, checkbox.mp3
-│   ├── logo.png
-│   └── ui/
-│       └── animation.gif
-├── fonts/                        # Schriftarten
-│   ├── font.ttf
-│   └── font2.ttf
-├── models/                       # ONNX-Modelle (optional für AI Tracker)
-│   └── YOLO11n.onnx
-└── content/                       # Alle Modul-Dateien
+│   └── ui/animation.gif
+├── fonts/
+├── models/        # ONNX-Modelle (optional für AI Tracker)
+└── content/       # Moduldateien
     ├── core.js
     ├── graph.js
-    ├── scale.js
     ├── automation.js
     ├── esp.js
-    ├── themer.js
-    ├── tracker.js
-    ├── network.js
-    ├── range.js
-    ├── autoclicker.js
-    ├── mousestats.js
-    ├── keycounter.js
     ├── ai_tracker.js
-    ├── edit_moment.js
     ├── macro_recorder.js
     ├── quantum_menu.js
-    ├── adblock_hider.js
-    ├── theme_changer.js
-    ├── splash.js
-    ├── navigation.js
     └── main.js
 ```
 
-## 🛠️ Entwicklung / Eigene Module
-
-Jedes Modul ist als Funktion im globalen `taming`-Objekt registriert (z.B. `t.graph`). Es erhält das `overlay` (Hauptmenü) als Parameter und gibt den erstellten Button zurück. Die Module werden in `main.js` nacheinander aufgerufen und in die Navigation eingereiht.
-
-**Beispiel für ein neues Modul:**
+**Beispiel: Eigenes Modul**
 
 ```javascript
 // content/mein_modul.js
@@ -209,25 +86,217 @@ Jedes Modul ist als Funktion im globalen `taming`-Objekt registriert (z.B. `t.gr
     btn.onclick = () => {
       win.style.display = win.style.display === 'none' ? 'block' : 'none';
     };
-    // ... Inhalt ...
     return btn;
   };
 })();
 ```
 
-In `main.js` muss es dann aufgerufen werden.
+### Entwicklung / Beiträge
 
-## 📄 Lizenz
+* Module registrieren sich am globalen `taming`-Objekt (z. B. `t.graph`) und erhalten das `overlay` als Parameter.
+* In `main.js` werden die Module initialisiert und in die Navigation eingefügt.
+* Pull Requests sollten klar beschreiben: Modul-Zweck, Konfigurationsoptionen, und nötige Assets/Modelle.
 
-Dieses Projekt ist unter der MIT-Lizenz veröffentlicht. Siehe [LICENSE](LICENSE) für weitere Informationen.
+### Lizenz
 
-## 🙏 Danksagung
-
-- Allen Testern und Unterstützern, die mit ihrem Feedback geholfen haben.
-- Der Open-Source-Community für Bibliotheken wie TensorFlow.js, ONNX Runtime, glMatrix, etc.
-- Taming.io für ein unterhaltsames Spiel, das uns inspiriert hat.
+Dieses Projekt steht unter der **MIT-Lizenz**. Siehe `LICENSE` für Details.
 
 ---
 
-**Viel Spaß mit Quantum Client!**  
-Bei Fragen, Problemen oder Ideen öffne ein Issue auf GitHub.
+## English
+
+**Summary**
+Quantum Client is a feature-rich browser extension for the game (hereafter “the client”) that provides modular tools to enhance and customize gameplay. It combines automation, analysis, UI and audio controls, plus experimental AI features into a single configurable interface.
+
+### Key features (short)
+
+* Modular design: enable/disable individual modules and configure them.
+* Performance & network tools (FPS/Ping graph, Network Inspector).
+* Automation (autoclicker, macro recorder, automation rules).
+* Visual and UI customization (themer, theme changer, scale, splash screen).
+* Player analysis (ESP, 3D tracker, experimental AI tracker).
+* Usability features (quantum menu, keybinds, UI sounds, adblock hider).
+
+### Installation
+
+1. Clone the repository or download as ZIP.
+2. Open Chrome/Chromium and navigate to `chrome://extensions`.
+3. Enable Developer mode.
+4. Click **Load unpacked** and select the folder containing `manifest.json`.
+5. The extension will be installed and active.
+
+> Note: Some features rely on the Debugger API (autoclicker, macro recorder, automation). Required permissions are included in `manifest.json`.
+
+### Usage
+
+* After installation a movable main control panel appears in the game.
+* Each module has a button that opens its window; paging arrows appear if there are more than three modules.
+* Right-click a module button to assign a keybind (keyboard or mouse button).
+* Press Right Shift to open the Quantum Menu — a circular quick menu with additional tools.
+
+### Notable modules (short)
+
+* **Graph**: Real-time line charts for FPS and ping.
+* **Scale**: Doubles the game canvas size.
+* **Automation**: Rules with triggers, actions and configurable delays.
+* **ESP**: Marks players by analyzing `drawImage` calls.
+* **AI Tracker (experimental)**: Local detection using ONNX models (WebGPU/WASM fallback).
+* **Macro Recorder Pro**: Records and replays mouse/keyboard with visual feedback.
+* **Quantum Menu**: Circular menu where buttons orbit and collide physically.
+* **Adblock Hider**: Automatically hides common adblock residue elements.
+* **Theme Changer / Themer**: Live replacement of images, colors and fonts.
+
+### Customization (settings panel)
+
+The settings panel allows choosing main menu visibility, background color, transparency, text and border colors, border-radius, shadow intensity and fonts from the `fonts` folder. Changes apply immediately.
+
+### Project structure (example)
+
+```
+quantum-client/
+├── manifest.json
+├── background.js
+├── icons/
+├── utils/
+├── fonts/
+├── models/
+└── content/
+    ├── core.js
+    ├── graph.js
+    ├── automation.js
+    ├── esp.js
+    ├── ai_tracker.js
+    ├── macro_recorder.js
+    ├── quantum_menu.js
+    └── main.js
+```
+
+**Example: Adding a custom module**
+
+```javascript
+// content/my_module.js
+(function() {
+  const t = window.taming;
+
+  t.myModule = function(overlay) {
+    const btn = t.createIconButton('my-icon', 56, 65, 35);
+    const win = t.createWindow('My Module', '100px', '100px', '300px', '200px');
+    win.style.display = 'none';
+    btn.onclick = () => {
+      win.style.display = win.style.display === 'none' ? 'block' : 'none';
+    };
+    return btn;
+  };
+})();
+```
+
+### Development / Contributions
+
+* Modules register on the global `taming` object (e.g. `t.graph`) and receive the `overlay` parameter.
+* `main.js` initializes modules and injects navigation entries.
+* For PRs, document purpose, configuration options and any required assets or models.
+
+### License
+
+This project is released under the **MIT License**. See `LICENSE` for details.
+
+---
+
+## Русский
+
+**Кратко**
+Quantum Client — расширение для браузера, которое добавляет в игру модульные инструменты для улучшения и настройки игрового процесса. Включает средства автоматизации, анализа, настройки интерфейса и звука, а также экспериментальные функции на базе ИИ.
+
+### Основные возможности (кратко)
+
+* Модульная архитектура: включайте/выключайте и настраивайте отдельные модули.
+* Инструменты для мониторинга и сети (графики FPS/Ping, Network Inspector).
+* Автоматизация (автокликер, макро-рекордер, правила автоматизации).
+* Визуальные и UI-настройки (Themer, Theme Changer, Scale, Splash Screen).
+* Анализ игроков (ESP, 3D-трекер, экспериментальный AI Tracker).
+* Удобство использования (Quantum Menu, назначение клавиш, звуки интерфейса, Adblock Hider).
+
+### Установка
+
+1. Клонируйте репозиторий или скачайте ZIP.
+2. Откройте Chrome/Chromium и перейдите на `chrome://extensions`.
+3. Включите режим разработчика.
+4. Нажмите **Load unpacked** и выберите папку с `manifest.json`.
+5. Расширение установится и будет активно.
+
+> Примечание: Некоторые функции используют Debugger API (автокликер, макро-рекордер, автоматизация). Необходимые разрешения указаны в `manifest.json`.
+
+### Использование
+
+* После установки в игре появится перемещаемое главное меню (панель управления).
+* Кнопки модулей открывают соответствующие окна; если модулей больше трёх — появляются стрелки для прокрутки.
+* Правый клик по кнопке открывает окно назначения клавиш (keybind).
+* Правая клавиша Shift открывает Quantum Menu — круговое меню с дополнительными инструментами.
+
+### Важные модули (кратко)
+
+* **Graph**: графики FPS и ping в реальном времени.
+* **Scale**: увеличение canvas в 2 раза.
+* **Automation**: правила с триггерами, действиями и задержками.
+* **ESP**: маркировка игроков через анализ `drawImage`.
+* **AI Tracker (экспериментально)**: локальное обнаружение через ONNX (WebGPU/WASM).
+* **Makro Recorder Pro**: запись и воспроизведение мыши/клавиатуры с визуализацией.
+* **Quantum Menu**: круговое меню с орбитой и физическими взаимодействиями кнопок.
+* **Adblock Hider**: скрывает элементы, оставшиеся от блокировщиков рекламы.
+* **Theme Changer / Themer**: замена изображений, цветов и шрифтов в реальном времени.
+
+### Настройки
+
+В панели настроек можно изменять: видимость меню, цвет фона, прозрачность, цвет текста и рамок, скругление (border-radius), интенсивность тени и шрифты из папки `fonts`. Изменения применяются мгновенно.
+
+### Структура проекта (пример)
+
+```
+quantum-client/
+├── manifest.json
+├── background.js
+├── icons/
+├── utils/
+├── fonts/
+├── models/
+└── content/
+    ├── core.js
+    ├── graph.js
+    ├── automation.js
+    ├── esp.js
+    ├── ai_tracker.js
+    ├── macro_recorder.js
+    ├── quantum_menu.js
+    └── main.js
+```
+
+**Пример: собственный модуль**
+
+```javascript
+// content/my_module.js
+(function() {
+  const t = window.taming;
+
+  t.myModule = function(overlay) {
+    const btn = t.createIconButton('my-icon', 56, 65, 35);
+    const win = t.createWindow('My Module', '100px', '100px', '300px', '200px');
+    win.style.display = 'none';
+    btn.onclick = () => {
+      win.style.display = win.style.display === 'none' ? 'block' : 'none';
+    };
+    return btn;
+  };
+})();
+```
+
+### Разработка / Вклад
+
+* Модули регистрируются на глобальном объекте `taming` (например, `t.graph`) и получают параметр `overlay`.
+* В `main.js` модули инициализируются и добавляются в навигацию.
+* При создании PR указывайте назначение модуля, параметры конфигурации и требуемые ресурсы/модели.
+
+### Лицензия
+
+Проект распространяется под **MIT License**. См. `LICENSE` для деталей.
+
+---
